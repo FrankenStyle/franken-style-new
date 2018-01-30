@@ -18,6 +18,20 @@
   "background": {
     "page": "background.html"
   },
-  "permissions": [ "contextMenus", "tabs", "storage", "https://github.com/*" ],
+    "content_scripts": [
+      {
+        "matches": [
+          "<all_urls>"
+        ],
+        "all_frames": true,
+        "js": [
+          "./js/content.bundle.js"
+        ],
+        "css": [
+          "./content.css"
+        ]
+      }
+    ],
+  "permissions": [ "contextMenus", "tabs", "storage", "<all_urls>" ],
   "content_security_policy": "default-src 'self'; script-src 'self'; style-src * 'unsafe-inline'; img-src 'self' data:;"
 }
