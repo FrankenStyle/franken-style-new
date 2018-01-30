@@ -1,7 +1,7 @@
 /* global chrome */
 import React, { Component } from 'react';
-import { Tabs, Tab, TabList, TabPanel } from 'react-tabs'
-import 'react-tabs/style/react-tabs.css'
+import { Tabs, Tab, TabList, TabPanel } from 'react-tabs';
+import 'react-tabs/style/react-tabs.css';
 // import logo from './logo.svg';
 import './App.css';
 import { SketchPicker } from 'react-color';
@@ -12,45 +12,29 @@ class App extends Component {
     this.state = {
       fontColor: '',
       element: 'Select an Element'
-    }
+    };
 
     this.handleFontColorChange = this.handleFontColorChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   componentDidMount() {
     chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+      const selectedClassName = request.selectedClassName;
+      const selectedNode = request.selectedNode.toLowerCase();
+      const selectedClassList = request.selectedClassList;
+      const display = `${selectedNode}.${selectedClassName}`;
 
-      var selectedClassName = request.selectedClassName;
-      var selectedNode = request.selectedNode.toLowerCase();
-      var selectedClassList = request.selectedClassList;
-      var display = selectedNode + "." + selectedClassName
-
-      // console.log("request Obj", request)
-      this.setState({ element: display })
-      sendResponse({ test: 'test' })
-    })
+      this.setState({ element: display });
+      sendResponse({ test: 'test' });
+    });
   }
-
-  // handleFontColorChange(newColor) {
-  //   this.setState({ fontColor: newColor });
-  // }
 
   handleFontColorChange(newColor) {
     this.setState({ fontColor: newColor.hex });
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-      chrome.tabs.sendMessage(tabs[0].id, { data: newColor.hex }, function (response) {
+      chrome.tabs.sendMessage(tabs[0].id, { data: newColor.hex }, (response) => {
       });
     });
-  }
-
-  handleSubmit(color, event) {
-    // const theData = event.target.fontColor.value;
-    // event.preventDefault();
-    // chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-    //   chrome.tabs.sendMessage(tabs[0].id, { data: theData }, function (response) {
-    //   });
-    // });
   }
 
   render() {
@@ -58,7 +42,7 @@ class App extends Component {
       <div className="App">
         <header className="App-header">
           <h1 className="App-title">FrankenStyle</h1>
-          <input type="text" value={this.state.element} id="displayImg"></input>
+          <input type="text" value={this.state.element} id="displayImg" />
 
         </header>
 
@@ -73,11 +57,8 @@ class App extends Component {
           </TabList>
 
           <TabPanel>
-            <form onSubmit={this.handleSubmit}>
-              {/* <input type="text" value={this.state.fontColor} onChange={this.handleFontColorChange} id="fontColor" className="jscolor" > */}
-              {/* </input> */}
-              <SketchPicker color={this.state.fontColor} onChange={this.handleFontColorChange} id="fontColor"  />
-              {/* <button type="submit" value="Submit"> Change Color </button> */}
+            <form >
+              <SketchPicker color={this.state.fontColor} onChange={this.handleFontColorChange} id="fontColor" />
             </form>
           </TabPanel>
           <TabPanel>
