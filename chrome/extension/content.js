@@ -1,22 +1,11 @@
-
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  let data = request.data || {};
-  let linksList = document.querySelectorAll('a');
-  [].forEach.call(linksList, (header) => {
-    header.style.backgroundColor = request.data;
-  });
-  sendResponse({ data, success: true });
-  chrome.runtime.sendMessage({ greeting: 'hello' }, () => {
-  });
-});
-
 let previousEl = null;
 
-document.addEventListener('mouseover', (event) => {
-  let selectedEl = event.target;
-  let selectedClassName = selectedEl.className;
-  let selectedNode = selectedEl.nodeName;
-  let selectedClassList = selectedEl.classList;
+function mouseOverHandler(event) {
+  const selectedEl = event.target;
+  const selectedClassName = selectedEl.className;
+  const selectedNode = selectedEl.nodeName;
+  const selectedClassList = selectedEl.classList;
+
   if (selectedEl.nodeName) {
     if (previousEl != null) {
       previousEl.classList.remove('mouseHoverElement');
@@ -27,4 +16,32 @@ document.addEventListener('mouseover', (event) => {
     chrome.runtime.sendMessage({ selectedClassName, selectedNode, selectedClassList }, () => {
     });
   }
-}, false);
+}
+
+function toggleHighlight(turnOn) {
+  if (turnOn) {
+    document.addEventListener('mouseover', mouseOverHandler, false);
+  } else {
+    document.removeEventListener('mouseover', mouseOverHandler, false);
+  }
+}
+
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  const backgroundColor = request['background-color'] || '';
+  const highlight = request.highlight || false;
+  const linksList = document.querySelectorAll('a');
+
+  if (highlight) {
+    toggleHighlight(true);
+  } else if (!highlight) {
+    toggleHighlight(false);
+  }
+
+  [].forEach.call(linksList, (header) => {
+    header.style.backgroundColor = backgroundColor;
+  });
+  sendResponse({ backgroundColor, success: true });
+  chrome.runtime.sendMessage({ greeting: 'hello' }, () => {
+  });
+});
+
