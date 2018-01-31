@@ -11,18 +11,29 @@ class App extends Component {
     super(props);
     this.state = {
       fontColor: '',
-      element: 'Select an Element'
+      element: 'Select an Element',
+      highlight: false
     };
 
     this.handleFontColorChange = this.handleFontColorChange.bind(this);
+    this.handleHighlightChange = this.handleHighlightChange.bind(this);
   }
 
   componentDidMount() {
     chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-      const selectedClassName = request.selectedClassName;
-      const selectedNode = request.selectedNode.toLowerCase();
-      const selectedClassList = request.selectedClassList;
-      const display = `${selectedNode}.${selectedClassName}`;
+      let selectedClassName;
+      let selectedNode;
+      let selectedClassList;
+
+      if (request.selectedClassList) selectedClassList = Array.prototype.slice.call(request.selectedClassList).join('.');
+
+      if (request.selectedNode) selectedNode = request.selectedNode.toLowerCase();
+      else selectedNode = '';
+
+      if (request.selectedClassName) selectedClassName = request.selectedClassName.split(' ').join('.');
+      else selectedClassName = '';
+
+      const display = selectedClassName ? `${selectedNode}.${selectedClassName}` : selectedNode;
 
       this.setState({ element: display });
       sendResponse({ test: 'test' });
@@ -32,7 +43,16 @@ class App extends Component {
   handleFontColorChange(newColor) {
     this.setState({ fontColor: newColor.hex });
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-      chrome.tabs.sendMessage(tabs[0].id, { data: newColor.hex }, (response) => {
+      chrome.tabs.sendMessage(tabs[0].id, { 'background-color': newColor.hex }, (response) => {
+      });
+    });
+  }
+
+  handleHighlightChange() {
+    const highlight = !this.state.highlight;
+    this.setState({ highlight });
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      chrome.tabs.sendMessage(tabs[0].id, { highlight }, (response) => {
       });
     });
   }
@@ -42,6 +62,9 @@ class App extends Component {
       <div className="App">
         <header className="App-header">
           <h1 className="App-title">FrankenStyle</h1>
+          <button type="button" onClick={this.handleHighlightChange}>
+            Select element
+          </button>
           <input type="text" value={this.state.element} id="displayImg" />
 
         </header>
