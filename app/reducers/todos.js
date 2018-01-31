@@ -1,18 +1,16 @@
 import * as ActionTypes from '../constants/ActionTypes';
 
 const initialState = [{
-  text: 'Use Redux',
-  completed: false,
+  color: '#FFF',
   id: 0
 }];
 
 const actionsMap = {
-  [ActionTypes.ADD_TODO](state, action) {
+  [ActionTypes.ADD_BACKGROUND_COLOR](state, action) {
     return [{
       id: state.reduce((maxId, todo) => Math.max(todo.id, maxId), -1) + 1,
-      completed: false,
-      text: action.text
-    }, ...state];
+      text: action.color
+    }];
   },
   [ActionTypes.DELETE_TODO](state, action) {
     return state.filter(todo =>

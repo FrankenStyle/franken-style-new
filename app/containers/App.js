@@ -1,12 +1,23 @@
 /* global chrome */
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 import { Tabs, Tab, TabList, TabPanel } from 'react-tabs';
+import * as TodoActions from '../actions/todos';
 import 'react-tabs/style/react-tabs.css';
-// import logo from './logo.svg';
 import './App.css';
 import { SketchPicker } from 'react-color';
 
-class App extends Component {
+@connect(
+  state => ({
+    todos: state.todos
+  }),
+  dispatch => ({
+    actions: bindActionCreators(TodoActions, dispatch)
+  })
+)
+
+export default class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -41,11 +52,9 @@ class App extends Component {
   }
 
   handleFontColorChange(newColor) {
+    const { todos, actions } = this.props;
     this.setState({ fontColor: newColor.hex });
-    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-      chrome.tabs.sendMessage(tabs[0].id, { 'background-color': newColor.hex }, (response) => {
-      });
-    });
+    actions.addBackgroundColor(newColor.hex);
   }
 
   handleHighlightChange() {
@@ -58,6 +67,7 @@ class App extends Component {
   }
 
   render() {
+    const { todos, actions } = this.props;
     return (
       <div className="App">
         <header className="App-header">
@@ -104,5 +114,3 @@ class App extends Component {
     );
   }
 }
-
-export default App;

@@ -26,6 +26,18 @@ function toggleHighlight(turnOn) {
   }
 }
 
+chrome.storage.onChanged.addListener((changes, namespace) => {
+  const linksList = document.querySelectorAll('a');
+  const changeArr = [];
+  for (const key in changes) {
+    const storageChange = changes[key];
+    changeArr.push(JSON.parse(storageChange.newValue));
+  }
+  [].forEach.call(linksList, (header) => {
+    header.style.backgroundColor = changeArr[0].todos[0].text;
+  });
+});
+
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   const backgroundColor = request['background-color'] || '';
   const highlight = request.highlight || false;
