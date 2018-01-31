@@ -12,7 +12,8 @@ const baseDevConfig = () => ({
   entry: {
     todoapp: [customPath, hotScript, path.join(__dirname, '../chrome/extension/todoapp')],
     background: [customPath, hotScript, path.join(__dirname, '../chrome/extension/background')],
-    content: [customPath, hotScript, path.join(__dirname, '../chrome/extension/content')]
+    content: [customPath, hotScript, path.join(__dirname, '../chrome/extension/content')],
+    popup: [customPath, hotScript, path.join(__dirname, '../chrome/extension/popup')]
   },
   devMiddleware: {
     publicPath: `http://${host}:${port}/js`,

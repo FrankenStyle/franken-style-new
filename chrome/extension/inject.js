@@ -1,3 +1,4 @@
+/* global chrome */
 import React, { Component } from 'react';
 import { render } from 'react-dom';
 import Dock from 'react-dock';
@@ -7,17 +8,16 @@ class InjectApp extends Component {
     super(props);
     this.state = { isVisible: false };
   }
-
-  buttonOnClick = () => {
-    this.setState({ isVisible: !this.state.isVisible });
-  };
-
+  componentDidMount() {
+    chrome.runtime.onMessage.addListener((request) => {
+      if (request.toggleSidebar === 'true') {
+        this.setState({ isVisible: !this.state.isVisible });
+      }
+    });
+  }
   render() {
     return (
       <div>
-        <button onClick={this.buttonOnClick}>
-          Open TodoApp
-        </button>
         <Dock
           position="right"
           dimMode="transparent"
