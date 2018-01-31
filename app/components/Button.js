@@ -16,7 +16,7 @@ class Button extends Component {
   render() {
     return (
       <div >
-        <button className={style.toggleButton} onClick={this.handleClick}>GREEN</button>
+        <button className={style.toggleButton} onClick={this.handleClick}>OPEN FRANKENSTYLE</button>
       </div>
     );
   }
