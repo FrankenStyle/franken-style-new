@@ -26,6 +26,20 @@ function toggleHighlight(turnOn) {
   }
 }
 
+
+function logStuff(event){
+  // event.preventDefault();
+  const selectedEl = event.target;
+  const selectedClassName = selectedEl.className;
+  const selectedNode = selectedEl.nodeName;
+  const selectedClassList = selectedEl.classList;
+
+  console.log(selectedClassName)
+}
+
+document.addEventListener('mousedown',logStuff, false)
+
+
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   const backgroundColor = request['background-color'] || '';
   const highlight = request.highlight || false;

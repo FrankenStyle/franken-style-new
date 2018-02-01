@@ -2,11 +2,22 @@
 import React, { Component } from 'react';
 import { Tabs, Tab, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
-// import logo from './logo.svg';
 import './App.css';
 import { SketchPicker } from 'react-color';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import * as TodoActions from '../actions/todos';
 
-class App extends Component {
+@connect(
+  state => ({
+    todos: state.todos
+  }),
+  dispatch => ({
+    actions: bindActionCreators(TodoActions, dispatch)
+  })
+)
+
+export default class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -58,6 +69,8 @@ class App extends Component {
   }
 
   render() {
+    const { todos, actions } = this.props;
+    console.log("todos:", todos, "actions:", actions)
     return (
       <div className="App">
         <header className="App-header">
@@ -105,4 +118,4 @@ class App extends Component {
   }
 }
 
-export default App;
+// export default App;
