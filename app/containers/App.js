@@ -23,11 +23,14 @@ export default class App extends Component {
     this.state = {
       fontColor: '',
       element: 'Select an Element',
-      highlight: false
+      highlight: false,
+      sketchOn: false
     };
 
     this.handleFontColorChange = this.handleFontColorChange.bind(this);
     this.handleHighlightChange = this.handleHighlightChange.bind(this);
+    this.handleSketchChange = this.handleSketchChange.bind(this);
+    this.handleScreenCapture = this.handleScreenCapture.bind(this);
   }
 
   componentDidMount() {
@@ -66,6 +69,23 @@ export default class App extends Component {
     });
   }
 
+  handleSketchChange() {
+    const sketchOn = !this.state.sketchOn;
+    this.setState({ sketchOn });
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      chrome.tabs.sendMessage(tabs[0].id, { sketchOn }, (response) => {
+      });
+    });
+  }
+
+  handleScreenCapture(){
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      chrome.tabs.captureVisibleTab(null, { format: "jpeg", quality: 100 }, function (dataUrl) {
+        window.open();
+      });
+    });
+  }
+
   render() {
     const { todos, actions } = this.props;
     return (
@@ -76,7 +96,14 @@ export default class App extends Component {
             Select element
           </button>
           <input type="text" value={this.state.element} id="displayImg" />
-
+          <hr />
+          <button type="button" onClick={this.handleSketchChange}>
+              Sketch
+          </button>
+          <br />
+          <button type="button" onClick={this.handleScreenCapture}>
+            Screen Capture
+          </button>
         </header>
 
         <Tabs>
