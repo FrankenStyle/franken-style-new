@@ -81,10 +81,7 @@ export default class App extends Component {
   handleScreenCapture(){
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       chrome.tabs.captureVisibleTab(null, { format: "jpeg", quality: 100 }, function (dataUrl) {
-        console.log(dataUrl);
-        // let image = new Image();
-        // image.src = dataUrl;
-        // window.open(dataUrl);
+        window.open();
       });
     });
   }
