@@ -1,6 +1,9 @@
 /* global chrome */
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 import { Tabs, Tab, TabList, TabPanel } from 'react-tabs';
+import * as TodoActions from '../actions/todos';
 import 'react-tabs/style/react-tabs.css';
 import './App.css';
 import { SketchPicker } from 'react-color';
@@ -23,11 +26,14 @@ export default class App extends Component {
     this.state = {
       fontColor: '',
       element: 'Select an Element',
-      highlight: false
+      highlight: false,
+      sketchOn: false
     };
 
     this.handleFontColorChange = this.handleFontColorChange.bind(this);
     this.handleHighlightChange = this.handleHighlightChange.bind(this);
+    this.handleSketchChange = this.handleSketchChange.bind(this);
+    this.handleScreenCapture = this.handleScreenCapture.bind(this);
   }
 
   componentDidMount() {
@@ -52,11 +58,9 @@ export default class App extends Component {
   }
 
   handleFontColorChange(newColor) {
+    const { todos, actions } = this.props;
     this.setState({ fontColor: newColor.hex });
-    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-      chrome.tabs.sendMessage(tabs[0].id, { 'background-color': newColor.hex }, (response) => {
-      });
-    });
+    actions.addBackgroundColor(newColor.hex);
   }
 
   handleHighlightChange() {
@@ -68,9 +72,25 @@ export default class App extends Component {
     });
   }
 
+  handleSketchChange() {
+    const sketchOn = !this.state.sketchOn;
+    this.setState({ sketchOn });
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      chrome.tabs.sendMessage(tabs[0].id, { sketchOn }, (response) => {
+      });
+    });
+  }
+
+  handleScreenCapture(){
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      chrome.tabs.captureVisibleTab(null, { format: "jpeg", quality: 100 }, function (dataUrl) {
+        window.open();
+      });
+    });
+  }
+
   render() {
     const { todos, actions } = this.props;
-    console.log("todos:", todos, "actions:", actions)
     return (
       <div className="App">
         <header className="App-header">
@@ -79,7 +99,14 @@ export default class App extends Component {
             Select element
           </button>
           <input type="text" value={this.state.element} id="displayImg" />
-
+          <hr />
+          <button type="button" onClick={this.handleSketchChange}>
+              Sketch
+          </button>
+          <br />
+          <button type="button" onClick={this.handleScreenCapture}>
+            Screen Capture
+          </button>
         </header>
 
         <Tabs>
@@ -117,5 +144,3 @@ export default class App extends Component {
     );
   }
 }
-
-// export default App;

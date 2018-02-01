@@ -1,7 +1,7 @@
 import * as types from '../constants/ActionTypes';
 
-export function addTodo(text) {
-  return { type: types.ADD_TODO, text };
+export function addBackgroundColor(color) {
+  return { type: types.ADD_BACKGROUND_COLOR, color };
 }
 
 export function deleteTodo(id) {
