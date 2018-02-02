@@ -4,8 +4,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Tabs, Tab, TabList, TabPanel } from 'react-tabs';
 import * as TodoActions from '../actions/todos';
-import 'react-tabs/style/react-tabs.css';
-import './App.css';
+import style from './App.css';
 import { SketchPicker } from 'react-color';
 
 @connect(
@@ -63,6 +62,13 @@ export default class App extends Component {
   handleSketchChange() {
     const sketchOn = !this.state.sketchOn;
     this.setState({ sketchOn });
+   if(sketchOn){
+    let sketchOnClick = "color: red; outline:1px solid limegreen;"
+    document.getElementById("sketchButton").style.cssText = sketchOnClick;
+   }else{
+    let sketchOffClick = "color:whitesmoke;"
+    document.getElementById("sketchButton").style.cssText = sketchOffClick;
+   }
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       chrome.tabs.sendMessage(tabs[0].id, { sketchOn }, (response) => {
       });
@@ -100,52 +106,63 @@ export default class App extends Component {
   render() {
     const { todos, actions } = this.props;
     return (
-      <div className="App">
-        <header className="App-header">
-          <h1 className="App-title">FrankenStyle</h1>
-          <button type="button" onClick={this.handleHighlightChange}>
-            Select element
-          </button>
-          <input type="text" value={this.state.element} id="displayImg" />
+      <div className={style.App}>
+        <header className={style.appHeader}>
+        <link rel="stylesheet" href="https://unpkg.com/react-tabs@2/style/react-tabs.css" />
+          <h1 className={style.appTitle}>FrankenStyle</h1>
+
+          <div id={style.elementSelector}>
+            <div id={style.toggleShrinker}>
+              <label className={style.switch}>
+                <input type="checkbox" onChange={()=>{this.handleHighlightChange()}}></input>
+                <span className={[style.slider, style.round].join(" ")}></span>
+              </label>
+              <span>Select Element</span>
+            </div>
+
+            <input type="text" value={this.state.element} id={style.displayImg} />
+          </div>  
           <hr />
-          <button type="button" onClick={this.handleSketchChange}>
-            <img src="/img/sketch.png" height="20" width="20" alt="Sketch" />
-          </button>
-          <br />
-          <button type="button" onClick={this.handleScreenCapture}>
-            <img src="/img/camera.png" height="20" width="20" alt="Screen Capture" />
-          </button>
+          <div className={style.buttons}>
+            <button className={style.buttonStyle} id="sketchButton" type="button" onClick={this.handleSketchChange}>
+              <img src="/img/sketch.png" alt="Sketch" /> Draw
+            </button>
+            <button className={style.buttonStyle} type="button" onClick={this.handleScreenCapture}>
+              <img src="/img/camera.png"  alt="Screen Capture" /> Screenshot
+            </button>
+          </div>
+
         </header>
 
         <Tabs>
-          <TabList >
-            <Tab>Color/Background</Tab>
-            <Tab>Flex</Tab>
-            <Tab>Text</Tab>
-            <Tab>Border</Tab>
-            <Tab>Position</Tab>
-            <Tab>Row</Tab>
+          <TabList id={style.colorTab} >
+            <Tab className={style.tabStyle}>Color/Background</Tab>
+            <Tab className={style.tabStyle}>Flex</Tab>
+            <Tab className={style.tabStyle}>Text</Tab>
+            <Tab className={style.tabStyle}>Border</Tab>
+            <Tab className={style.tabStyle}>Position</Tab>
+            <Tab className={style.tabStyle}>Row</Tab>
           </TabList>
-
           <TabPanel>
-            <form >
-              <SketchPicker color={this.state.backgroundColor} onChange={this.handleBackgroundColorChange} />
+            <form id={style.colorForm}>
+              <h2 className={style.selectColorTitle}>Select Background Color</h2>
+              <SketchPicker color={this.state.fontColor} onChange={this.handleBackgroundColorChange} />
             </form>
           </TabPanel>
           <TabPanel>
-            <h2>Flex</h2>
+            <h2 className={style.selectColorTitle}>Coming Soon!</h2>
           </TabPanel>
           <TabPanel>
-            <h2>Text</h2>
+            <h2 className={style.selectColorTitle}>Coming Soon!</h2>
           </TabPanel>
           <TabPanel>
-            <h2>Border</h2>
+            <h2 className={style.selectColorTitle}>Coming Soon!</h2>
           </TabPanel>
           <TabPanel>
-            <h2>Position</h2>
+            <h2 className={style.selectColorTitle}>Coming Soon!</h2>
           </TabPanel>
           <TabPanel>
-            <h2>Row</h2>
+            <h2 className={style.selectColorTitle}>Coming Soon!</h2>
           </TabPanel>
         </Tabs>
       </div>
