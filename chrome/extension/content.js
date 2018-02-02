@@ -4,24 +4,21 @@ let selectedElement = '';
 
 function selectedElementHandler(event) {
   const selectedEl = event.target;
-  const selectedClassName = selectedEl.className;
-  const selectedNode = selectedEl.nodeName;
-  const selectedClassList = selectedEl.classList;
-  selectedElement = selectedNode.toLowerCase();
+  selectedEl.classList.remove('mouseHoverElement');
+  const selectedClassName = selectedEl.className.split(' ')[0] || '';
+  const selectedNode = selectedEl.nodeName || '';
+  const cssSelector = selectedClassName ? (selectedNode + '.' + selectedClassName).toLowerCase() : selectedNode.toLowerCase();// make dry
+  selectedElement = cssSelector;
   toggleHighlight(false);
-
-  chrome.runtime.sendMessage({ selectedClassName, selectedNode, selectedClassList }, () => {
+  chrome.runtime.sendMessage({ cssSelector }, () => {
   });
-
 }
-
-document.addEventListener('click', selectedElementHandler, false);
 
 function mouseOverHandler(event) {
   const selectedEl = event.target;
-  const selectedClassName = selectedEl.className;
+  const selectedClassName = selectedEl.className.split(' ')[0]||'';
   const selectedNode = selectedEl.nodeName;
-  const selectedClassList = selectedEl.classList;
+  const cssSelector = selectedClassName ? (selectedNode + '.' + selectedClassName).toLowerCase() : selectedNode.toLowerCase()
 
   if (selectedEl.nodeName) {
     if (previousEl != null) {
@@ -30,7 +27,7 @@ function mouseOverHandler(event) {
     selectedEl.classList.add('mouseHoverElement');
     previousEl = selectedEl;
 
-    chrome.runtime.sendMessage({ selectedClassName, selectedNode, selectedClassList }, () => {
+    chrome.runtime.sendMessage({ cssSelector }, () => {
     });
   }
 }
@@ -38,8 +35,10 @@ function mouseOverHandler(event) {
 function toggleHighlight(turnOn) {
   if (turnOn) {
     document.addEventListener('mouseover', mouseOverHandler, false);
+    document.addEventListener('click', selectedElementHandler, false);
   } else {
     document.removeEventListener('mouseover', mouseOverHandler, false);
+    document.removeEventListener('click', selectedElementHandler, false);
   }
 }
 
@@ -77,19 +76,18 @@ chrome.storage.onChanged.addListener((changes, namespace) => {
     const storageChange = changes[key];
     changeArr.push(JSON.parse(storageChange.newValue));
   }
+  
   let propertyObj = changeArr[0].cssProperties[selectedElement][changeArr[0].cssProperties[selectedElement].length - 1];
   const elementList = document.querySelectorAll(selectedElement);
+
   [].forEach.call(elementList, (header) => {
     header.style['background-color'] = propertyObj['background-color'];
   });
-
 });
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  const backgroundColor = request['background-color'] || '';
   const highlight = request.highlight || false;
   const sketchOn = request.sketchOn || false;
-  const linksList = document.querySelectorAll('a');
 
   if (highlight) {
     toggleHighlight(true);
