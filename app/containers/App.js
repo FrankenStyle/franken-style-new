@@ -22,7 +22,7 @@ export default class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      fontColor: '',
+      backgroundColor: '',
       element: 'Select an Element',
       highlight: false,
       sketchOn: false
@@ -36,29 +36,19 @@ export default class App extends Component {
 
   componentDidMount() {
     chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-      let selectedClassName;
-      let selectedNode;
-      let selectedClassList;
+      let cssSelector;
 
-      if (request.selectedClassList) selectedClassList = Array.prototype.slice.call(request.selectedClassList).join('.');
+      if (request.cssSelector) cssSelector = request.cssSelector;
 
-      if (request.selectedNode) selectedNode = request.selectedNode.toLowerCase();
-      else selectedNode = '';
-
-      if (request.selectedClassName) selectedClassName = request.selectedClassName.split(' ').join('.');
-      else selectedClassName = '';
-
-      const display = selectedClassName ? `${selectedNode}.${selectedClassName}` : selectedNode;
-
-      this.setState({ element: selectedNode });
+      this.setState({ element: cssSelector });
       sendResponse({ test: 'test' });
     });
   }
 
   handleBackgroundColorChange(newColor) {
     const { todos, actions } = this.props;
-    this.setState({ fontColor: newColor.hex });
-    actions.addProperty(this.state.element, "background-color", newColor.hex);
+    this.setState({ backgroundColor: newColor.hex });
+    actions.addProperty(this.state.element, 'background-color', newColor.hex);
   }
 
   handleHighlightChange() {
@@ -139,7 +129,7 @@ export default class App extends Component {
 
           <TabPanel>
             <form >
-              <SketchPicker color={this.state.fontColor} onChange={this.handleBackgroundColorChange} />
+              <SketchPicker color={this.state.backgroundColor} onChange={this.handleBackgroundColorChange} />
             </form>
           </TabPanel>
           <TabPanel>
