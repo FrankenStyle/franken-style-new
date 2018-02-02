@@ -10,7 +10,8 @@ import { SketchPicker } from 'react-color';
 
 @connect(
   state => ({
-    todos: state.todos
+    todos: state.todos,
+    cssProperties: state.cssProperties
   }),
   dispatch => ({
     actions: bindActionCreators(TodoActions, dispatch)
@@ -49,7 +50,7 @@ export default class App extends Component {
 
       const display = selectedClassName ? `${selectedNode}.${selectedClassName}` : selectedNode;
 
-      this.setState({ element: display });
+      this.setState({ element: selectedNode });
       sendResponse({ test: 'test' });
     });
   }
@@ -57,7 +58,8 @@ export default class App extends Component {
   handleFontColorChange(newColor) {
     const { todos, actions } = this.props;
     this.setState({ fontColor: newColor.hex });
-    actions.addBackgroundColor(newColor.hex);
+    // actions.addBackgroundColor(newColor.hex);
+    actions.addProperty(this.state.element, "background-color", newColor.hex)
   }
 
   handleHighlightChange() {

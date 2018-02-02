@@ -56,15 +56,21 @@ function toggleSketch(turnOn) {
 }
 
 chrome.storage.onChanged.addListener((changes, namespace) => {
-  const linksList = document.querySelectorAll('a');
+  // const linksList = document.querySelectorAll('a');
   const changeArr = [];
   for (const key in changes) {
     const storageChange = changes[key];
     changeArr.push(JSON.parse(storageChange.newValue));
-  }
-  [].forEach.call(linksList, (header) => {
-    header.style.backgroundColor = changeArr[0].todos[0].text;
-  });
+    console.log('Storage key "%s" in namespace "%s" changed. ' +
+      'Old value was "%s", new value is "%s".',
+      key,
+      namespace,
+      storageChange.oldValue,
+      storageChange.newValue);  }
+  // [].forEach.call(linksList, (header) => {
+  //   header.style.backgroundColor = changeArr[0].todos[0].text;
+  // });
+
 });
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
@@ -86,10 +92,10 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     toggleSketch(false);
   }
 
-  [].forEach.call(linksList, (header) => {
-    header.style.backgroundColor = backgroundColor;
-  });
-  sendResponse({ backgroundColor, success: true });
-  chrome.runtime.sendMessage({ greeting: 'hello' }, () => {
-  });
+  // [].forEach.call(linksList, (header) => {
+  //   header.style.backgroundColor = backgroundColor;
+  // });
+  // sendResponse({ backgroundColor, success: true });
+  // chrome.runtime.sendMessage({ greeting: 'hello' }, () => {
+  // });
 });
