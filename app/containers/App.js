@@ -28,7 +28,7 @@ export default class App extends Component {
       sketchOn: false
     };
 
-    this.handleFontColorChange = this.handleFontColorChange.bind(this);
+    this.handleBackgroundColorChange = this.handleBackgroundColorChange.bind(this);
     this.handleHighlightChange = this.handleHighlightChange.bind(this);
     this.handleSketchChange = this.handleSketchChange.bind(this);
     this.handleScreenCapture = this.handleScreenCapture.bind(this);
@@ -55,11 +55,10 @@ export default class App extends Component {
     });
   }
 
-  handleFontColorChange(newColor) {
+  handleBackgroundColorChange(newColor) {
     const { todos, actions } = this.props;
     this.setState({ fontColor: newColor.hex });
-    // actions.addBackgroundColor(newColor.hex);
-    actions.addProperty(this.state.element, "background-color", newColor.hex)
+    actions.addProperty(this.state.element, "background-color", newColor.hex);
   }
 
   handleHighlightChange() {
@@ -120,7 +119,7 @@ export default class App extends Component {
 
           <TabPanel>
             <form >
-              <SketchPicker color={this.state.fontColor} onChange={this.handleFontColorChange} id="fontColor" />
+              <SketchPicker color={this.state.fontColor} onChange={this.handleBackgroundColorChange} />
             </form>
           </TabPanel>
           <TabPanel>
