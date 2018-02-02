@@ -20,7 +20,7 @@ class InjectApp extends Component {
       <div>
         <Dock
           position="right"
-          dimMode="transparent"
+          dimMode="none"
           defaultSize={0.4}
           isVisible={this.state.isVisible}
         >
