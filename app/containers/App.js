@@ -51,8 +51,6 @@ export default class App extends Component {
   }
 
   handleHighlightChange() {
-    console.log('CHECKED!!!')
-
     const highlight = !this.state.highlight;
     this.setState({ highlight });
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
@@ -65,10 +63,10 @@ export default class App extends Component {
     const sketchOn = !this.state.sketchOn;
     this.setState({ sketchOn });
    if(sketchOn){
-    let sketchOnClick = "color: red; outline-width:1px; outline-color:limegreen; outline-style:solid;"
+    let sketchOnClick = "color: red; outline:1px solid limegreen;"
     document.getElementById("sketchButton").style.cssText = sketchOnClick;
    }else{
-    let sketchOffClick = "color:whitesmoke; outline:none;"
+    let sketchOffClick = "color:whitesmoke;"
     document.getElementById("sketchButton").style.cssText = sketchOffClick;
    }
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
