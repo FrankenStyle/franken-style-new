@@ -81,8 +81,28 @@ export default class App extends Component {
 
   handleScreenCapture(){
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-      chrome.tabs.captureVisibleTab(null, { format: "jpeg", quality: 100 }, function (dataUrl) {
-        window.open();
+      let id = tabs[0].id;
+
+      chrome.tabs.captureVisibleTab(function (screenshotUrl) {
+        const viewTabUrl = chrome.extension.getURL('screenshot.html?id=' + id++)
+        let targetId = null;
+
+        chrome.tabs.onUpdated.addListener(function listener(tabId, changedProps) {
+          if (tabId != targetId || changedProps.status != "complete")
+            return;
+          chrome.tabs.onUpdated.removeListener(listener);
+          const views = chrome.extension.getViews();
+          for (var i = 0; i < views.length; i++) {
+            const view = views[i];
+            if (view.location.href == viewTabUrl) {
+              view.setScreenshotUrl(screenshotUrl);
+              break;
+            }
+          }
+        });
+        chrome.tabs.create({ url: viewTabUrl }, function (tab) {
+          targetId = tab.id;
+        });
       });
     });
   }
@@ -99,11 +119,11 @@ export default class App extends Component {
           <input type="text" value={this.state.element} id="displayImg" />
           <hr />
           <button type="button" onClick={this.handleSketchChange}>
-              Sketch
+            <img src="/img/sketch.png" height="20" width="20" alt="Sketch" />
           </button>
           <br />
           <button type="button" onClick={this.handleScreenCapture}>
-            Screen Capture
+            <img src="/img/camera.png" height="20" width="20" alt="Screen Capture" />
           </button>
         </header>
 
