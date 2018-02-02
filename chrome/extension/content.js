@@ -1,5 +1,21 @@
 let previousEl = null;
 let p5Instance = null;
+let selectedElement = '';
+
+function selectedElementHandler(event) {
+  const selectedEl = event.target;
+  const selectedClassName = selectedEl.className;
+  const selectedNode = selectedEl.nodeName;
+  const selectedClassList = selectedEl.classList;
+  selectedElement = selectedNode.toLowerCase();
+  toggleHighlight(false);
+
+  chrome.runtime.sendMessage({ selectedClassName, selectedNode, selectedClassList }, () => {
+  });
+
+}
+
+document.addEventListener('click', selectedElementHandler, false);
 
 function mouseOverHandler(event) {
   const selectedEl = event.target;
@@ -56,20 +72,16 @@ function toggleSketch(turnOn) {
 }
 
 chrome.storage.onChanged.addListener((changes, namespace) => {
-  // const linksList = document.querySelectorAll('a');
   const changeArr = [];
   for (const key in changes) {
     const storageChange = changes[key];
     changeArr.push(JSON.parse(storageChange.newValue));
-    console.log('Storage key "%s" in namespace "%s" changed. ' +
-      'Old value was "%s", new value is "%s".',
-      key,
-      namespace,
-      storageChange.oldValue,
-      storageChange.newValue);  }
-  // [].forEach.call(linksList, (header) => {
-  //   header.style.backgroundColor = changeArr[0].todos[0].text;
-  // });
+  }
+  let propertyObj = changeArr[0].cssProperties[selectedElement][changeArr[0].cssProperties[selectedElement].length - 1];
+  const elementList = document.querySelectorAll(selectedElement);
+  [].forEach.call(elementList, (header) => {
+    header.style['background-color'] = propertyObj['background-color'];
+  });
 
 });
 
@@ -91,11 +103,4 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (!sketchOn) {
     toggleSketch(false);
   }
-
-  // [].forEach.call(linksList, (header) => {
-  //   header.style.backgroundColor = backgroundColor;
-  // });
-  // sendResponse({ backgroundColor, success: true });
-  // chrome.runtime.sendMessage({ greeting: 'hello' }, () => {
-  // });
 });
