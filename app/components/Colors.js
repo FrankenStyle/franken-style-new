@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import * as cssActions from '../actions/cssProperties';
 import style from '../containers/App.css';
 import { SketchPicker } from 'react-color';
+import ColorPicker from './ColorPicker';
 
 @connect(
   state => ({
@@ -19,9 +20,11 @@ export default class Colors extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      backgroundColor: ''
+      color: '#FA1A1A',
+      backgroundColor: '#FA1A1A'
     };
 
+    this.handleColorChange = this.handleColorChange.bind(this);
     this.handleBackgroundColorChange = this.handleBackgroundColorChange.bind(this);
   }
 
@@ -31,11 +34,20 @@ export default class Colors extends Component {
     actions.addProperty(element, 'background-color', newColor.hex);
   }
 
+  handleColorChange(newColor) {
+    const { actions, element } = this.props;
+    this.setState({ color: newColor.hex });
+    actions.addProperty(element, 'color', newColor.hex);
+  }
+
   render() {
     return (
       <form id={style.colorForm}>
+        <h2 className={style.selectColorTitle}>Select Font Color</h2>
+        <ColorPicker color={this.state.color} onChangeHandler={this.handleColorChange} />
+
         <h2 className={style.selectColorTitle}>Select Background Color</h2>
-        <SketchPicker color={this.state.backgroundColor} onChange={this.handleBackgroundColorChange} />
+        <ColorPicker color={this.state.backgroundColor} onChangeHandler={this.handleBackgroundColorChange} />
       </form>
     );
   }

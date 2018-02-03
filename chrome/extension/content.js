@@ -7,7 +7,7 @@ function selectedElementHandler(event) {
   selectedEl.classList.remove('mouseHoverElement');
   const selectedClassName = selectedEl.className.split(' ')[0] || '';
   const selectedNode = selectedEl.nodeName || '';
-  const cssSelector = selectedClassName ? (selectedNode + '.' + selectedClassName).toLowerCase() : selectedNode.toLowerCase();// make dry
+  const cssSelector = selectedClassName ? (`${selectedNode}.${selectedClassName}`).toLowerCase() : selectedNode.toLowerCase();// make dry
   selectedElement = cssSelector;
   toggleHighlight(false);
   chrome.runtime.sendMessage({ cssSelector }, () => {
@@ -16,9 +16,9 @@ function selectedElementHandler(event) {
 
 function mouseOverHandler(event) {
   const selectedEl = event.target;
-  const selectedClassName = selectedEl.className.split(' ')[0]||'';
+  const selectedClassName = selectedEl.className.split(' ')[0] || '';
   const selectedNode = selectedEl.nodeName;
-  const cssSelector = selectedClassName ? (selectedNode + '.' + selectedClassName).toLowerCase() : selectedNode.toLowerCase()
+  const cssSelector = selectedClassName ? (`${selectedNode}.${selectedClassName}`).toLowerCase() : selectedNode.toLowerCase();
 
   if (selectedEl.nodeName) {
     if (previousEl != null) {
@@ -45,19 +45,19 @@ function toggleHighlight(turnOn) {
 function newP5Instance() {
   const s = function (sketch) {
     sketch.setup = function () {
-      document.body.style['userSelect'] = 'none';
-      let canvas = sketch.createCanvas(sketch.windowWidth, sketch.windowHeight);
+      document.body.style.userSelect = 'none';
+      const canvas = sketch.createCanvas(sketch.windowWidth, sketch.windowHeight);
       canvas.position(0, 0);
       canvas.style('pointer-events', 'none');
       sketch.clear();
-    }
+    };
     sketch.draw = function () {
       sketch.stroke(0);
       sketch.strokeWeight(4);
       if (sketch.mouseIsPressed) {
         sketch.line(sketch.mouseX, sketch.mouseY, sketch.pmouseX, sketch.pmouseY);
       }
-    }
+    };
   };
   return new p5(s);
 }
@@ -70,19 +70,42 @@ function toggleSketch(turnOn) {
   }
 }
 
-chrome.storage.onChanged.addListener((changes, namespace) => {
-  const changeArr = [];
+// Move somewhere?
+const isEquivalent = (a, b) => {
+  const aProps = Object.getOwnPropertyNames(a);
+  const bProps = Object.getOwnPropertyNames(b);
+  const output = {};
+  for (let i = 0; i < aProps.length; i++) {
+    const propName = aProps[i];
+    if (a[propName] !== b[propName]) {
+      output[propName] = b[propName];
+    }
+  }
+  return output;
+};
+
+chrome.storage.onChanged.addListener((changes) => {
+  const changesArr = [];
   for (const key in changes) {
     const storageChange = changes[key];
-    changeArr.push(JSON.parse(storageChange.newValue));
+    changesArr.push(JSON.parse(storageChange.newValue));
   }
-  
-  let propertyObj = changeArr[0].cssProperties[selectedElement][changeArr[0].cssProperties[selectedElement].length - 1];
+
+  const selectorHistory = changesArr[0].cssProperties[selectedElement];
+
+  const propertyObj = selectorHistory[selectorHistory.length - 1] || {};
   const elementList = document.querySelectorAll(selectedElement);
 
-  [].forEach.call(elementList, (header) => {
-    header.style['background-color'] = propertyObj['background-color'];
-  });
+  if (selectorHistory.length > 1) {
+    const previousPropertyObj = selectorHistory[selectorHistory.length - 2];
+    const diffObj = isEquivalent(previousPropertyObj, propertyObj);
+
+    for (const key in diffObj) {
+      [].forEach.call(elementList, (header) => {
+        header.style[key] = diffObj[key];
+      });
+    }
+  }
 });
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
