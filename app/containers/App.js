@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { Tabs, Tab, TabList, TabPanel } from 'react-tabs';
 import * as cssActions from '../actions/cssProperties';
 import style from './App.css';
-import { SketchPicker } from 'react-color';
+import Colors from '../components/Colors';
 
 @connect(
   state => ({
@@ -20,13 +20,11 @@ export default class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      backgroundColor: '',
       element: 'Select an Element',
       highlight: false,
       sketchOn: false
     };
 
-    this.handleBackgroundColorChange = this.handleBackgroundColorChange.bind(this);
     this.handleHighlightChange = this.handleHighlightChange.bind(this);
     this.handleSketchChange = this.handleSketchChange.bind(this);
     this.handleScreenCapture = this.handleScreenCapture.bind(this);
@@ -43,12 +41,6 @@ export default class App extends Component {
     });
   }
 
-  handleBackgroundColorChange(newColor) {
-    const { actions } = this.props;
-    this.setState({ backgroundColor: newColor.hex });
-    actions.addProperty(this.state.element, 'background-color', newColor.hex);
-  }
-
   handleHighlightChange() {
     const highlight = !this.state.highlight;
     this.setState({ highlight });
@@ -62,12 +54,12 @@ export default class App extends Component {
     const sketchOn = !this.state.sketchOn;
     this.setState({ sketchOn });
     if (sketchOn) {
-     const sketchOnClick = 'color: red; outline:1px solid limegreen;';
-     document.getElementById('sketchButton').style.cssText = sketchOnClick;
-   } else{
-     const sketchOffClick = 'color:whitesmoke;';
-     document.getElementById('sketchButton').style.cssText = sketchOffClick;
-   }
+      const sketchOnClick = 'color: red; outline:1px solid limegreen;';
+      document.getElementById('sketchButton').style.cssText = sketchOnClick;
+    } else {
+      const sketchOffClick = 'color:whitesmoke;';
+      document.getElementById('sketchButton').style.cssText = sketchOffClick;
+    }
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       chrome.tabs.sendMessage(tabs[0].id, { sketchOn }, (response) => {
       });
@@ -79,12 +71,11 @@ export default class App extends Component {
       let id = tabs[0].id;
 
       chrome.tabs.captureVisibleTab((screenshotUrl) => {
-        const viewTabUrl = chrome.extension.getURL(`screenshot.html?id=${  id++}`);
+        const viewTabUrl = chrome.extension.getURL(`screenshot.html?id=${id++}`);
         let targetId = null;
 
         chrome.tabs.onUpdated.addListener(function listener(tabId, changedProps) {
-          if (tabId != targetId || changedProps.status != 'complete')
-            {return;}
+          if (tabId != targetId || changedProps.status != 'complete') { return; }
           chrome.tabs.onUpdated.removeListener(listener);
           const views = chrome.extension.getViews();
           for (let i = 0; i < views.length; i++) {
@@ -103,7 +94,6 @@ export default class App extends Component {
   }
 
   render() {
-    const { actions } = this.props;
     return (
       <div className={style.App}>
         <header className={style.appHeader}>
@@ -143,10 +133,7 @@ export default class App extends Component {
             <Tab className={style.tabStyle}>Row</Tab>
           </TabList>
           <TabPanel>
-            <form id={style.colorForm}>
-              <h2 className={style.selectColorTitle}>Select Background Color</h2>
-              <SketchPicker color={this.state.backgroundColor} onChange={this.handleBackgroundColorChange} />
-            </form>
+            <Colors element={this.state.element} />
           </TabPanel>
           <TabPanel>
             <h2 className={style.selectColorTitle}>Coming Soon!</h2>
