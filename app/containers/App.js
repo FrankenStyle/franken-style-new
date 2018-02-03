@@ -32,6 +32,7 @@ export default class App extends Component {
     this.handleHighlightChange = this.handleHighlightChange.bind(this);
     this.handleSketchChange = this.handleSketchChange.bind(this);
     this.handleScreenCapture = this.handleScreenCapture.bind(this);
+    this.handleDownload = this.handleDownload.bind(this);
   }
 
   componentDidMount() {
@@ -44,7 +45,21 @@ export default class App extends Component {
       sendResponse({ test: 'test' });
     });
   }
-
+  handleDownload(){
+    const ele = this.state.element;
+    chrome.storage.local.get(function (result) {
+      console.log('store ',  JSON.parse(result.state))
+      const storeObj = JSON.parse(result.state);
+      let newCss = '';
+      for(let k in storeObj){
+        if(newCss.length === 0 ){
+          newCss += (k + '' + JSON.stringify(storeObj[k]))
+        }
+        newCss += ','  + (k + '' + JSON.stringify(storeObj[k]))
+      }
+console.log('newww cs', newCss)
+  });
+  }
   handleBackgroundColorChange(newColor) {
     const { todos, actions } = this.props;
     this.setState({ backgroundColor: newColor.hex });
@@ -148,6 +163,7 @@ export default class App extends Component {
             <h2>Row</h2>
           </TabPanel>
         </Tabs>
+        <button onClick= {this.handleDownload}> Download CSS </button>
       </div>
     );
   }
