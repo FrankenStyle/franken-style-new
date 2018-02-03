@@ -1,19 +1,18 @@
 /* global chrome */
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Tabs, Tab, TabList, TabPanel } from 'react-tabs';
-import * as TodoActions from '../actions/todos';
+import * as cssActions from '../actions/cssProperties';
 import style from './App.css';
 import { SketchPicker } from 'react-color';
 
 @connect(
   state => ({
-    todos: state.todos,
     cssProperties: state.cssProperties
   }),
   dispatch => ({
-    actions: bindActionCreators(TodoActions, dispatch)
+    actions: bindActionCreators(cssActions, dispatch)
   })
 )
 
@@ -45,7 +44,7 @@ export default class App extends Component {
   }
 
   handleBackgroundColorChange(newColor) {
-    const { todos, actions } = this.props;
+    const { actions } = this.props;
     this.setState({ backgroundColor: newColor.hex });
     actions.addProperty(this.state.element, 'background-color', newColor.hex);
   }
@@ -104,7 +103,7 @@ export default class App extends Component {
   }
 
   render() {
-    const { todos, actions } = this.props;
+    const { actions } = this.props;
     return (
       <div className={style.App}>
         <header className={style.appHeader}>
