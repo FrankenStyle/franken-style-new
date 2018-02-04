@@ -8,7 +8,8 @@ module.exports = {
   entry: {
     main: [customPath, path.join(__dirname, '../chrome/extension/main')],
     background: [customPath, path.join(__dirname, '../chrome/extension/background')],
-    content: [customPath, path.join(__dirname, '../chrome/extension/content')],
+    content: [customPath, path.join(__dirname, '../chrome/extension/content/content')],
+    sketch: [customPath, path.join(__dirname, '../chrome/extension/content/sketch')],
     inject: [customPath, path.join(__dirname, '../chrome/extension/inject')],
     popup: [customPath, path.join(__dirname, '../chrome/extension/popup')],
   },

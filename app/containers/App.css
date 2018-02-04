@@ -52,12 +52,26 @@ button {
   outline-color:limegreen;
 }
 
+#buttonClose {
+  display: flex;
+  justify-content: flex-start;
+}
+
 #elementSelector{
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
 }
+
+#currentUrl:disabled{
+  width: 50%;
+  height:22px;
+  margin-left:104px;
+  background: rgb(252, 252, 252);
+  margin-bottom: 3px;
+}
+
 #displayImg{
   background-color: white;
   color:black;
