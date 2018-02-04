@@ -22,7 +22,8 @@ export default class App extends Component {
     this.state = {
       element: 'Select an Element',
       highlight: false,
-      sketchOn: false
+      sketchOn: false,
+      currentUrl: ''
     };
 
     this.handleHighlightChange = this.handleHighlightChange.bind(this);
@@ -32,6 +33,7 @@ export default class App extends Component {
   }
 
   componentDidMount() {
+    this.setState({ currentUrl: window.location.ancestorOrigins[0] });
     chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       let cssSelector;
 
@@ -122,6 +124,7 @@ export default class App extends Component {
 
             <input type="text" value={this.state.element} id={style.displayImg} />
           </div>
+          <input type="text" value={this.state.currentUrl} id={style.currentUrl} disabled />
           <hr />
           <div className={style.buttons}>
             <button className={style.buttonStyle} id="sketchButton" type="button" onClick={this.handleSketchChange}>
