@@ -13,13 +13,11 @@ Style your webpages the way you want without the hassle of coding CSS because we
 
 >insert popup gif
 
-#### Sidebar
+#### Sidebar/Inject page
 
 >insert window gif
 
 The sidebar menu is created by injecting an iframe into the the HTML page you visit.
-
-##### Inject page
 
 The inject script is being run by [chrome/extension/background/inject.js](chrome/extension/background/inject.js).
 
