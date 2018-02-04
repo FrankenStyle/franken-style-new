@@ -9,13 +9,9 @@ Style your webpages the way you want without the hassle of coding CSS because we
  - Write code with ES2015+ syntax (Using [Babel](https://github.com/babel/babel))
  - E2E tests of Window & Popup & Inject pages (Using [Chrome Driver](https://www.npmjs.com/package/chromedriver), [Selenium Webdriver](https://www.npmjs.com/package/selenium-webdriver))
 
-#### Popup
-
->insert popup gif
-
 #### Sidebar/Inject page
 
->insert window gif
+![Popup](https://media.giphy.com/media/l4pT1xMS8Ak2ZC42k/giphy.gif)
 
 The sidebar menu is created by injecting an iframe into the the HTML page you visit.
 
