@@ -2,8 +2,14 @@
 A chrome extension that makes CSS easier and more fun!
 Style your webpages the way you want without the hassle of coding CSS because we do it for you!
 
-## Features
+## Features 
 
+ - Style any webpage's CSS to your own preferences
+ - Downloadable CSS file (coming soon)
+ - Make notes on the webpage and take a screenshot
+ - Save your profile(coming soon)
+ 
+ ## Technologies
  - Simple [React](https://github.com/facebook/react)/[Redux](https://github.com/rackt/redux) examples of Chrome Extension Window & Popup & Inject pages
  - Hot reloading React/Redux (Using [Webpack](https://github.com/webpack/webpack) and [React Transform](https://github.com/gaearon/react-transform))
  - Write code with ES2015+ syntax (Using [Babel](https://github.com/babel/babel))
