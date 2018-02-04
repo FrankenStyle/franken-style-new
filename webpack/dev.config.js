@@ -12,7 +12,8 @@ const baseDevConfig = () => ({
   entry: {
     main: [customPath, hotScript, path.join(__dirname, '../chrome/extension/main')],
     background: [customPath, hotScript, path.join(__dirname, '../chrome/extension/background')],
-    content: [customPath, hotScript, path.join(__dirname, '../chrome/extension/content')],
+    content: [customPath, hotScript, path.join(__dirname, '../chrome/extension/content/content')],
+    sketch: [customPath, hotScript, path.join(__dirname, '../chrome/extension/content/sketch')],
     popup: [customPath, hotScript, path.join(__dirname, '../chrome/extension/popup')]
   },
   devMiddleware: {
