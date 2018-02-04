@@ -8,11 +8,11 @@ Style your webpages the way you want without the hassle of coding CSS because we
  - Downloadable CSS file (coming soon)
  - Make notes on the webpage and take a screenshot
  - Save your profile(coming soon)
- 
+
  ## Technologies
- - Simple [React](https://github.com/facebook/react)/[Redux](https://github.com/rackt/redux) examples of Chrome Extension Window & Popup & Inject pages
+ - [React](https://github.com/facebook/react)/[Redux](https://github.com/rackt/redux) examples of Chrome Extension Window & Popup & Inject pages
  - Hot reloading React/Redux (Using [Webpack](https://github.com/webpack/webpack) and [React Transform](https://github.com/gaearon/react-transform))
- - Write code with ES2015+ syntax (Using [Babel](https://github.com/babel/babel))
+ - ES2015+ syntax (Using [Babel](https://github.com/babel/babel))
  - E2E tests of Window & Popup & Inject pages (Using [Chrome Driver](https://www.npmjs.com/package/chromedriver), [Selenium Webdriver](https://www.npmjs.com/package/selenium-webdriver))
 
 #### Sidebar/Inject page
