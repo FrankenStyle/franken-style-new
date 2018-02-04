@@ -52,6 +52,11 @@ button {
   outline-color:limegreen;
 }
 
+#buttonClose {
+  display: flex;
+  justify-content: flex-start;
+}
+
 #elementSelector{
   display: flex;
   flex-direction: row;

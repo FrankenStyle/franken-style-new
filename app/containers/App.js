@@ -28,6 +28,7 @@ export default class App extends Component {
     this.handleHighlightChange = this.handleHighlightChange.bind(this);
     this.handleSketchChange = this.handleSketchChange.bind(this);
     this.handleScreenCapture = this.handleScreenCapture.bind(this);
+    this.handleClose = this.handleClose.bind(this);
   }
 
   componentDidMount() {
@@ -93,11 +94,21 @@ export default class App extends Component {
     });
   }
 
+  handleClose() {
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      chrome.tabs.sendMessage(tabs[0].id, { toggleSidebar: 'true' }, function (response) {
+      });
+    });
+  }
+
   render() {
     return (
       <div className={style.App}>
         <header className={style.appHeader}>
           <link rel="stylesheet" href="https://unpkg.com/react-tabs@2/style/react-tabs.css" />
+          <button id={style.buttonClose} type="button" onClick={this.handleClose}>
+            <img src="/img/close.png" alt="Close" />
+          </button>
           <h1 className={style.appTitle}>FrankenStyle</h1>
 
           <div id={style.elementSelector}>
