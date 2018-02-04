@@ -1,12 +1,6 @@
-# React Chrome Extension Boilerplate
-
-[![Build Status](https://travis-ci.org/jhen0409/react-chrome-extension-boilerplate.svg?branch=master)](https://travis-ci.org/jhen0409/react-chrome-extension-boilerplate)
-[![Build status: Windows](https://ci.appveyor.com/api/projects/status/b5xy6ev6oykth0d2/branch/master?svg=true)](https://ci.appveyor.com/project/jhen0409/react-chrome-extension-boilerplate/branch/master)
-[![NPM version](http://img.shields.io/npm/v/react-chrome-extension-boilerplate.svg?style=flat)](https://www.npmjs.com/package/react-chrome-extension-boilerplate)
-[![Dependency Status](https://david-dm.org/jhen0409/react-chrome-extension-boilerplate.svg)](https://david-dm.org/jhen0409/react-chrome-extension-boilerplate)
-[![devDependency Status](https://david-dm.org/jhen0409/react-chrome-extension-boilerplate/dev-status.svg)](https://david-dm.org/jhen0409/react-chrome-extension-boilerplate#info=devDependencies)
-
-> Boilerplate for Chrome Extension React.js project.
+# FrankenStyle 
+A chrome extension that makes CSS easier and more fun!
+Style your webpages the way you want without the hassle of coding CSS because we do it for you!
 
 ## Features
 
@@ -15,25 +9,19 @@
  - Write code with ES2015+ syntax (Using [Babel](https://github.com/babel/babel))
  - E2E tests of Window & Popup & Inject pages (Using [Chrome Driver](https://www.npmjs.com/package/chromedriver), [Selenium Webdriver](https://www.npmjs.com/package/selenium-webdriver))
 
-## Examples
-
-The example is edited from [Redux](https://github.com/rackt/redux) TodoMVC example.
-
 #### Popup
 
-![Popup](https://cloud.githubusercontent.com/assets/3001525/14128490/dc05e9f8-f653-11e5-9de6-82d1de01844a.gif)
+>insert popup gif
 
-The `todos` state will be saved to `chrome.storage.local`.
+#### Sidebar
 
-#### Window
+>insert window gif
 
-![Window](https://cloud.githubusercontent.com/assets/3001525/14128489/da176b62-f653-11e5-9bff-fefc35232358.gif)
+The sidebar menu is created by injecting an iframe into the the HTML page you visit.
 
-The context menu is created by [chrome/extension/background/contextMenus.js](chrome/extension/background/contextMenus.js).
+##### Inject page
 
-#### Inject page
-
-The inject script is being run by [chrome/extension/background/inject.js](chrome/extension/background/inject.js). A simple example will be inject bottom of page(`https://github.com/*`) if you visit.
+The inject script is being run by [chrome/extension/background/inject.js](chrome/extension/background/inject.js).
 
 If you are receiving the error message `Failed to load resource: net::ERR_INSECURE_RESPONSE`, you need to allow invalid certificates for resources loaded from localhost. You can do this by visiting the following URL: `chrome://flags/#allow-insecure-localhost` and enabling **Allow invalid certificates for resources loaded from localhost**.
 
@@ -41,7 +29,7 @@ If you are receiving the error message `Failed to load resource: net::ERR_INSECU
 
 ```bash
 # clone it
-$ git clone https://github.com/jhen0409/react-chrome-extension-boilerplate.git
+$ git clone https://github.com/FrankenStyle/franken-style-new
 
 # Install dependencies
 $ npm install
@@ -55,12 +43,12 @@ $ npm install
 # start webpack development server
 $ npm run dev
 ```
-* If you're developing Inject page, please allow `https://localhost:3000` connections. (Because `injectpage` injected GitHub (https) pages, so webpack server procotol must be https.)
+* If you're developing Inject page, please allow `https://localhost:3000` connections. (Because `injectpage` injected (https) pages, so webpack server procotol must be https.)
 * [Load unpacked extensions](https://developer.chrome.com/extensions/getstarted#unpacked) with `./dev` folder.
 
 #### React/Redux hot reload
 
-This boilerplate uses `Webpack` and `react-transform`, and use `Redux`. You can hot reload by editing related files of Popup & Window & Inject page.
+This extension uses `Webpack`, `react-transform`, and `Redux`. You can hot reload by editing related files of Popup & Window & Inject page.
 
 #### Using Redux DevTools Extension
 
@@ -108,6 +96,8 @@ $ npm run build
 $ npm run test-e2e
 ```
 
+## Credits
+React-Chrome-Extension-Boilerplate by [jhen0409](https://github.com/jhen0409/react-chrome-extension-boilerplate)
 ## LICENSE
 
 [MIT](LICENSE)
