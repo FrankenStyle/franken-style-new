@@ -74,7 +74,7 @@ export default class App extends Component {
       let id = tabs[0].id;
 
       chrome.tabs.captureVisibleTab((screenshotUrl) => {
-        const viewTabUrl = chrome.extension.getURL(`screenshot.html?id=${id++}`);
+        const viewTabUrl = chrome.extension.getURL(`/screenshot/screenshot.html?id=${id++}`);
         let targetId = null;
 
         chrome.tabs.onUpdated.addListener(function listener(tabId, changedProps) {
