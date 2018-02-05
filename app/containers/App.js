@@ -25,7 +25,8 @@ export default class App extends Component {
       backgroundColor: '',
       element: 'Select an Element',
       highlight: false,
-      sketchOn: false
+      sketchOn: false,
+      newCss: ''
     };
 
     this.handleBackgroundColorChange = this.handleBackgroundColorChange.bind(this);
@@ -33,6 +34,8 @@ export default class App extends Component {
     this.handleSketchChange = this.handleSketchChange.bind(this);
     this.handleScreenCapture = this.handleScreenCapture.bind(this);
     this.handleDownload = this.handleDownload.bind(this);
+    this.handleResetStore = this.handleResetStore.bind(this);
+    this.download = this.download.bind(this);
   }
 
   componentDidMount() {
@@ -45,21 +48,44 @@ export default class App extends Component {
       sendResponse({ test: 'test' });
     });
   }
-  handleDownload(){
-    const ele = this.state.element;
-    chrome.storage.local.get(function (result) {
-      console.log('store ',  JSON.parse(result.state))
-      const storeObj = JSON.parse(result.state);
-      let newCss = '';
-      for(let k in storeObj){
-        if(newCss.length === 0 ){
-          newCss += (k + '' + JSON.stringify(storeObj[k]))
-        }
-        newCss += ','  + (k + '' + JSON.stringify(storeObj[k]))
-      }
-console.log('newww cs', newCss)
-  });
+  download( text) {
+    var element = document.createElement('a');
+    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+    element.setAttribute('download', 'style.css');
+    element.style.display = 'none';
+    element.click();
+
+    document.body.removeChild(element);
   }
+  handleDownload() {
+    const storeElement = this.state.element;
+    
+        let promisifyGet = () => { 
+          return new Promise((resolve)=>{
+            let newCss='';
+            chrome.storage.local.get((result)=>{
+                  const storeObj = JSON.parse(result.state);
+                  const cssProperties = storeObj.cssProperties;
+                  for (let tagNames in cssProperties) {
+                    const propertiesArrayLength = cssProperties[tagNames].length-1;
+                    const singleProperty = cssProperties[tagNames]; // array at tagname
+                    const cssStyle = singleProperty[propertiesArrayLength];//most recently changed property 
+                    const className = tagNames.split('.');// [span, classname]
+                    if(className.length===1){
+                      newCss += (tagNames + JSON.stringify(cssStyle) + '\n');
+                    } else {
+                      newCss += ('.' + className[1] + JSON.stringify(cssStyle) + '\n');
+                    }
+                  }
+                  newCss = newCss.replace(/['"]+/g, '');//replaces quotes from JSON.stringify
+                  resolve(newCss);
+            })
+          })
+        }
+         promisifyGet().then(css=>this.setState({newCss: css}))
+         .then(()=>this.download(this.state.newCss));
+  }
+
   handleBackgroundColorChange(newColor) {
     const { todos, actions } = this.props;
     this.setState({ backgroundColor: newColor.hex });
@@ -111,9 +137,18 @@ console.log('newww cs', newCss)
       });
     });
   }
+  handleResetStore(){
+    chrome.storage.local.clear(function() {
+      var error = chrome.runtime.lastError;
+      if (error) {
+          console.error(error);
+      }
+    });
+  }
 
   render() {
     const { todos, actions } = this.props;
+
     return (
       <div className="App">
         <header className="App-header">
@@ -164,6 +199,9 @@ console.log('newww cs', newCss)
           </TabPanel>
         </Tabs>
         <button onClick= {this.handleDownload}> Download CSS </button>
+        <div>
+        <button onClick= {this.handleReset}>STORE RESET </button>
+        </div>
       </div>
     );
   }
