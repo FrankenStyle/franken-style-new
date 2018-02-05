@@ -3,6 +3,12 @@ let selectedElement = '';
 
 function selectedElementHandler(event) {
   const selectedEl = event.target;
+  if (event.preventDefault) {
+    event.preventDefault();
+  } else {
+    event.returnValue = false;
+    event.stopPropagation();
+  }
   selectedEl.classList.remove('mouseHoverElement');
   const selectedClassName = selectedEl.className.split(' ')[0] || '';
   const selectedNode = selectedEl.nodeName || '';
