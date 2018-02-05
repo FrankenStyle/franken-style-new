@@ -1,1 +1,2 @@
 export const ADD_PROPERTY = 'ADD_PROPERTY';
+export const RESET_PROPERTIES = 'RESET_PROPERTIES';

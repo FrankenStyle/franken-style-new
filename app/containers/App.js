@@ -33,6 +33,7 @@ export default class App extends Component {
     this.handleDownload = this.handleDownload.bind(this);
     this.download = this.download.bind(this);
     this.handleClose = this.handleClose.bind(this);
+    this.handleReset = this.handleReset.bind(this);
   }
 
   componentDidMount() {
@@ -150,6 +151,11 @@ export default class App extends Component {
     });
   }
 
+  handleReset() {
+    const { actions } = this.props;
+    actions.resetProperties();
+  }
+
   render() {
     return (
       <div className={style.App}>
@@ -171,7 +177,6 @@ export default class App extends Component {
 
             <input type="text" value={this.state.element} id={style.displayImg} />
           </div>
-          <input type="text" value={this.state.currentUrl} id={style.currentUrl} disabled />
           <hr />
           <div className={style.buttons}>
             <button className={style.buttonStyle} id="sketchButton" type="button" onClick={this.handleSketchChange}>
@@ -183,7 +188,7 @@ export default class App extends Component {
           </div>
 
         </header>
-
+        <div id={style.mainSection}>
         <Tabs>
           <TabList id={style.colorTab} >
             <Tab className={style.tabStyle}>Color/Background</Tab>
@@ -213,6 +218,16 @@ export default class App extends Component {
           </TabPanel>
         </Tabs>
         <button onClick= {this.handleDownload}> Download CSS </button>
+
+        <div id={style.footer}>
+          <button id={style.buttonReset} type="button" onClick={this.handleReset}>
+            <img src="/img/reset.png" alt="Reset" title="Reset Chrome Storage.." />
+          </button>
+          <input type="text" value={this.state.currentUrl} id={style.currentUrl} disabled />
+        </div>
+
+        </div>
+
       </div>
     );
   }

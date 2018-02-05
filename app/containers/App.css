@@ -57,6 +57,21 @@ button {
   justify-content: flex-start;
 }
 
+#mainSection{
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+}
+
+#footer{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 5px;
+}
+
 #elementSelector{
   display: flex;
   flex-direction: row;
@@ -65,11 +80,11 @@ button {
 }
 
 #currentUrl:disabled{
-  width: 50%;
+  width: 250px;
   height:22px;
-  margin-left:104px;
   background: rgb(252, 252, 252);
   margin-bottom: 3px;
+  margin-top: 3px;
 }
 
 #displayImg{

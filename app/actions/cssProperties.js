@@ -8,3 +8,9 @@ export function addProperty(tagName, property, propertyValue){
     propertyValue
   };
 }
+
+export function resetProperties() {
+  return {
+    type: types.RESET_PROPERTIES
+  };
+}

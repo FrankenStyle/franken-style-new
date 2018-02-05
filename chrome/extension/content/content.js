@@ -3,6 +3,12 @@ let selectedElement = '';
 
 function selectedElementHandler(event) {
   const selectedEl = event.target;
+  if (event.preventDefault) {
+    event.preventDefault();
+  } else {
+    event.returnValue = false;
+    event.stopPropagation();
+  }
   selectedEl.classList.remove('mouseHoverElement');
   const selectedClassName = selectedEl.className.split(' ')[0] || '';
   const selectedNode = selectedEl.nodeName || '';
@@ -56,13 +62,32 @@ const isEquivalent = (a, b) => {
 };
 
 chrome.storage.onChanged.addListener((changes) => {
+
+  // chrome.storage.local.clear(function () {
+  //   const error = chrome.runtime.lastError;
+  //   if (error) {
+  //     console.error(error);
+  //   }
+  // });
+
+
   const changesArr = [];
   for (const key in changes) {
     const storageChange = changes[key];
-    changesArr.push(JSON.parse(storageChange.newValue));
+    console.log(storageChange);
+    if (storageChange.hasOwnProperty('newValue')) {
+      changesArr.push(JSON.parse(storageChange.newValue));
+    }
+    if (storageChange.hasOwnProperty('oldValue')) {
+      changesArr.push(JSON.parse(storageChange.oldValue));
+    }
   }
 
-  const selectorHistory = changesArr[0].cssProperties[selectedElement];
+  //if cssProperties is {}
+  //use oldValue to retrieve all the nodes that got changed (document.querySelectorAll(selectedElement)),
+  //then, for each element retrieved run something like document.getElementById("id").style.display = null (header.style.style = null;)
+
+  const selectorHistory = changesArr[0].cssProperties[selectedElement] || [];
 
   const propertyObj = selectorHistory[selectorHistory.length - 1] || {};
   const elementList = document.querySelectorAll(selectedElement);
@@ -76,6 +101,21 @@ chrome.storage.onChanged.addListener((changes) => {
         header.style[key] = diffObj[key];
       });
     }
+  }
+
+  ////
+
+  if (Object.keys(changesArr[0].cssProperties).length === 0){
+    console.log('empty obj ', changesArr[0].cssProperties );
+    const selectorOldHistory = changesArr[1].cssProperties[selectedElement] || [];
+
+    Object.keys(changesArr[1].cssProperties).forEach(key => {
+      const elementOldList = document.querySelectorAll(key);
+        [].forEach.call(elementOldList, (header) => {
+          console.log('header',header);
+          header.style = null;
+        });
+    });
   }
 });
 
