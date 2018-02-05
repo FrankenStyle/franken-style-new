@@ -38,7 +38,14 @@ export default class App extends Component {
     chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       let cssSelector;
 
-      if (request.cssSelector) cssSelector = request.cssSelector;
+      if (request.cssSelector) {
+        cssSelector = request.cssSelector;
+      }
+
+      if (request.clicked) {
+        const chekboxElement = document.getElementById("checkbox");
+        chekboxElement.click();
+      }
 
       this.setState({ element: cssSelector });
       sendResponse({ test: 'test' });
@@ -122,7 +129,7 @@ export default class App extends Component {
           <div id={style.elementSelector}>
             <div id={style.toggleShrinker}>
               <label className={style.switch}>
-                <input type="checkbox" onChange={() => { this.handleHighlightChange(); }} />
+                <input id="checkbox" type="checkbox" onChange={() => { this.handleHighlightChange(); }} />
                 <span className={[style.slider, style.round].join(' ')} />
               </label>
               <span>Select Element</span>

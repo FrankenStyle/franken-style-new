@@ -15,7 +15,8 @@ function selectedElementHandler(event) {
   const cssSelector = selectedClassName ? (`${selectedNode}.${selectedClassName}`).toLowerCase() : selectedNode.toLowerCase();// make dry
   selectedElement = cssSelector;
   toggleHighlight(false);
-  chrome.runtime.sendMessage({ cssSelector }, () => {
+  const clicked = true;
+  chrome.runtime.sendMessage({ cssSelector, clicked }, () => {
   });
 }
 
@@ -62,19 +63,9 @@ const isEquivalent = (a, b) => {
 };
 
 chrome.storage.onChanged.addListener((changes) => {
-
-  // chrome.storage.local.clear(function () {
-  //   const error = chrome.runtime.lastError;
-  //   if (error) {
-  //     console.error(error);
-  //   }
-  // });
-
-
   const changesArr = [];
   for (const key in changes) {
     const storageChange = changes[key];
-    console.log(storageChange);
     if (storageChange.hasOwnProperty('newValue')) {
       changesArr.push(JSON.parse(storageChange.newValue));
     }
@@ -83,12 +74,7 @@ chrome.storage.onChanged.addListener((changes) => {
     }
   }
 
-  //if cssProperties is {}
-  //use oldValue to retrieve all the nodes that got changed (document.querySelectorAll(selectedElement)),
-  //then, for each element retrieved run something like document.getElementById("id").style.display = null (header.style.style = null;)
-
   const selectorHistory = changesArr[0].cssProperties[selectedElement] || [];
-
   const propertyObj = selectorHistory[selectorHistory.length - 1] || {};
   const elementList = document.querySelectorAll(selectedElement);
 
@@ -103,16 +89,13 @@ chrome.storage.onChanged.addListener((changes) => {
     }
   }
 
-  ////
 
   if (Object.keys(changesArr[0].cssProperties).length === 0){
-    console.log('empty obj ', changesArr[0].cssProperties );
     const selectorOldHistory = changesArr[1].cssProperties[selectedElement] || [];
 
     Object.keys(changesArr[1].cssProperties).forEach(key => {
       const elementOldList = document.querySelectorAll(key);
         [].forEach.call(elementOldList, (header) => {
-          console.log('header',header);
           header.style = null;
         });
     });
