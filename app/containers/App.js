@@ -120,7 +120,9 @@ export default class App extends Component {
   handleScreenCapture() {
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       let id = tabs[0].id;
-
+      chrome.tabs.sendMessage(tabs[0].id, { toggleSidebar: 'true' }, function (response) {
+      });
+      setTimeout(function(){
       chrome.tabs.captureVisibleTab((screenshotUrl) => {
         const viewTabUrl = chrome.extension.getURL(`/screenshot/screenshot.html?id=${id++}`);
         let targetId = null;
@@ -141,6 +143,7 @@ export default class App extends Component {
           targetId = tab.id;
         });
       });
+    },250)
     });
   }
 
