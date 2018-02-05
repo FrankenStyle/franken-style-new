@@ -1,20 +1,18 @@
 /* global chrome */
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Tabs, Tab, TabList, TabPanel } from 'react-tabs';
-import * as TodoActions from '../actions/todos';
-import 'react-tabs/style/react-tabs.css';
-import './App.css';
-import { SketchPicker } from 'react-color';
+import * as cssActions from '../actions/cssProperties';
+import style from './App.css';
+import Colors from '../components/Colors';
 
 @connect(
   state => ({
-    todos: state.todos,
     cssProperties: state.cssProperties
   }),
   dispatch => ({
-    actions: bindActionCreators(TodoActions, dispatch)
+    actions: bindActionCreators(cssActions, dispatch)
   })
 )
 
@@ -22,23 +20,23 @@ export default class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      backgroundColor: '',
       element: 'Select an Element',
       highlight: false,
       sketchOn: false,
-      newCss: ''
+      newCss: '',
+      currentUrl: ''
     };
 
-    this.handleBackgroundColorChange = this.handleBackgroundColorChange.bind(this);
     this.handleHighlightChange = this.handleHighlightChange.bind(this);
     this.handleSketchChange = this.handleSketchChange.bind(this);
     this.handleScreenCapture = this.handleScreenCapture.bind(this);
     this.handleDownload = this.handleDownload.bind(this);
-    this.handleResetStore = this.handleResetStore.bind(this);
     this.download = this.download.bind(this);
+    this.handleClose = this.handleClose.bind(this);
   }
 
   componentDidMount() {
+    this.setState({ currentUrl: window.location.ancestorOrigins[0] });
     chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       let cssSelector;
 
@@ -48,7 +46,7 @@ export default class App extends Component {
       sendResponse({ test: 'test' });
     });
   }
-  download( text) {
+  download(text) {
     var element = document.createElement('a');
     element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
     element.setAttribute('download', 'style.css');
@@ -58,38 +56,31 @@ export default class App extends Component {
     document.body.removeChild(element);
   }
   handleDownload() {
-    const storeElement = this.state.element;
-    
-        let promisifyGet = () => { 
-          return new Promise((resolve)=>{
-            let newCss='';
-            chrome.storage.local.get((result)=>{
-                  const storeObj = JSON.parse(result.state);
-                  const cssProperties = storeObj.cssProperties;
-                  for (let tagNames in cssProperties) {
-                    const propertiesArrayLength = cssProperties[tagNames].length-1;
-                    const singleProperty = cssProperties[tagNames]; // array at tagname
-                    const cssStyle = singleProperty[propertiesArrayLength];//most recently changed property 
-                    const className = tagNames.split('.');// [span, classname]
-                    if(className.length===1){
-                      newCss += (tagNames + JSON.stringify(cssStyle) + '\n');
-                    } else {
-                      newCss += ('.' + className[1] + JSON.stringify(cssStyle) + '\n');
-                    }
-                  }
-                  newCss = newCss.replace(/['"]+/g, '');//replaces quotes from JSON.stringify
-                  resolve(newCss);
-            })
-          })
-        }
-         promisifyGet().then(css=>this.setState({newCss: css}))
-         .then(()=>this.download(this.state.newCss));
-  }
-
-  handleBackgroundColorChange(newColor) {
-    const { todos, actions } = this.props;
-    this.setState({ backgroundColor: newColor.hex });
-    actions.addProperty(this.state.element, 'background-color', newColor.hex);
+    const promisifyGet = () =>
+      new Promise((resolve) => {
+        let newCss='';
+        chrome.storage.local.get((result)=>{
+          const storeObj = JSON.parse(result.state);
+          const cssProperties = storeObj.cssProperties;
+          for (const tagNames in cssProperties) {
+            const propertiesArrayLength = cssProperties[tagNames].length-1;
+            const singleProperty = cssProperties[tagNames]; // array at tagname
+            const cssStyle = singleProperty[propertiesArrayLength];//most recently changed property
+            const className = tagNames.split('.');// [span, classname]
+            if (className.length===1){
+              newCss += (tagNames + JSON.stringify(cssStyle) + '\n');
+            } else {
+              newCss += ('.' + className[1] + JSON.stringify(cssStyle) + '\n');
+            }
+          }
+          newCss = newCss.replace(/['"]+/g, '')
+            .replace(/[,]+/g, ';')
+            .replace(/[}]+/g, ';}');//replaces quotes from JSON.stringify and format for css
+          resolve(newCss);
+        });
+      });
+    promisifyGet().then(css => this.setState({ newCss: css }))
+      .then(() => this.download(this.state.newCss));
   }
 
   handleHighlightChange() {
@@ -104,26 +95,32 @@ export default class App extends Component {
   handleSketchChange() {
     const sketchOn = !this.state.sketchOn;
     this.setState({ sketchOn });
+    if (sketchOn) {
+      const sketchOnClick = 'color: red; outline:1px solid limegreen;';
+      document.getElementById('sketchButton').style.cssText = sketchOnClick;
+    } else {
+      const sketchOffClick = 'color:whitesmoke;';
+      document.getElementById('sketchButton').style.cssText = sketchOffClick;
+    }
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       chrome.tabs.sendMessage(tabs[0].id, { sketchOn }, (response) => {
       });
     });
   }
 
-  handleScreenCapture(){
+  handleScreenCapture() {
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       let id = tabs[0].id;
 
-      chrome.tabs.captureVisibleTab(function (screenshotUrl) {
-        const viewTabUrl = chrome.extension.getURL('screenshot.html?id=' + id++)
+      chrome.tabs.captureVisibleTab((screenshotUrl) => {
+        const viewTabUrl = chrome.extension.getURL(`/screenshot/screenshot.html?id=${id++}`);
         let targetId = null;
 
         chrome.tabs.onUpdated.addListener(function listener(tabId, changedProps) {
-          if (tabId != targetId || changedProps.status != "complete")
-            return;
+          if (tabId != targetId || changedProps.status != 'complete') { return; }
           chrome.tabs.onUpdated.removeListener(listener);
           const views = chrome.extension.getViews();
-          for (var i = 0; i < views.length; i++) {
+          for (let i = 0; i < views.length; i++) {
             const view = views[i];
             if (view.location.href == viewTabUrl) {
               view.setScreenshotUrl(screenshotUrl);
@@ -131,7 +128,7 @@ export default class App extends Component {
             }
           }
         });
-        chrome.tabs.create({ url: viewTabUrl }, function (tab) {
+        chrome.tabs.create({ url: viewTabUrl }, (tab) => {
           targetId = tab.id;
         });
       });
@@ -146,62 +143,76 @@ export default class App extends Component {
     });
   }
 
-  render() {
-    const { todos, actions } = this.props;
+  handleClose() {
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      chrome.tabs.sendMessage(tabs[0].id, { toggleSidebar: 'true' }, function (response) {
+      });
+    });
+  }
 
+  render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <h1 className="App-title">FrankenStyle</h1>
-          <button type="button" onClick={this.handleHighlightChange}>
-            Select element
+      <div className={style.App}>
+        <header className={style.appHeader}>
+          <link rel="stylesheet" href="https://unpkg.com/react-tabs@2/style/react-tabs.css" />
+          <button id={style.buttonClose} type="button" onClick={this.handleClose}>
+            <img src="/img/close.png" alt="Close" />
           </button>
-          <input type="text" value={this.state.element} id="displayImg" />
+          <h1 className={style.appTitle}>FrankenStyle</h1>
+
+          <div id={style.elementSelector}>
+            <div id={style.toggleShrinker}>
+              <label className={style.switch}>
+                <input type="checkbox" onChange={() => { this.handleHighlightChange(); }} />
+                <span className={[style.slider, style.round].join(' ')} />
+              </label>
+              <span>Select Element</span>
+            </div>
+
+            <input type="text" value={this.state.element} id={style.displayImg} />
+          </div>
+          <input type="text" value={this.state.currentUrl} id={style.currentUrl} disabled />
           <hr />
-          <button type="button" onClick={this.handleSketchChange}>
-            <img src="/img/sketch.png" height="20" width="20" alt="Sketch" />
-          </button>
-          <br />
-          <button type="button" onClick={this.handleScreenCapture}>
-            <img src="/img/camera.png" height="20" width="20" alt="Screen Capture" />
-          </button>
+          <div className={style.buttons}>
+            <button className={style.buttonStyle} id="sketchButton" type="button" onClick={this.handleSketchChange}>
+              <img src="/img/sketch.png" alt="Sketch" /> Draw
+            </button>
+            <button className={style.buttonStyle} type="button" onClick={this.handleScreenCapture}>
+              <img src="/img/camera.png" alt="Screen Capture" /> Screenshot
+            </button>
+          </div>
+
         </header>
 
         <Tabs>
-          <TabList >
-            <Tab>Color/Background</Tab>
-            <Tab>Flex</Tab>
-            <Tab>Text</Tab>
-            <Tab>Border</Tab>
-            <Tab>Position</Tab>
-            <Tab>Row</Tab>
+          <TabList id={style.colorTab} >
+            <Tab className={style.tabStyle}>Color/Background</Tab>
+            <Tab className={style.tabStyle}>Flex</Tab>
+            <Tab className={style.tabStyle}>Text</Tab>
+            <Tab className={style.tabStyle}>Border</Tab>
+            <Tab className={style.tabStyle}>Position</Tab>
+            <Tab className={style.tabStyle}>Row</Tab>
           </TabList>
-
           <TabPanel>
-            <form >
-              <SketchPicker color={this.state.backgroundColor} onChange={this.handleBackgroundColorChange} />
-            </form>
+            <Colors element={this.state.element} />
           </TabPanel>
           <TabPanel>
-            <h2>Flex</h2>
+            <h2 className={style.selectColorTitle}>Coming Soon!</h2>
           </TabPanel>
           <TabPanel>
-            <h2>Text</h2>
+            <h2 className={style.selectColorTitle}>Coming Soon!</h2>
           </TabPanel>
           <TabPanel>
-            <h2>Border</h2>
+            <h2 className={style.selectColorTitle}>Coming Soon!</h2>
           </TabPanel>
           <TabPanel>
-            <h2>Position</h2>
+            <h2 className={style.selectColorTitle}>Coming Soon!</h2>
           </TabPanel>
           <TabPanel>
-            <h2>Row</h2>
+            <h2 className={style.selectColorTitle}>Coming Soon!</h2>
           </TabPanel>
         </Tabs>
         <button onClick= {this.handleDownload}> Download CSS </button>
-        <div>
-        <button onClick= {this.handleReset}>STORE RESET </button>
-        </div>
       </div>
     );
   }

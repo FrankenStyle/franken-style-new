@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Button from '../../app/components/Button';
-//import './popup.css';
 
 chrome.storage.local.get('state', (obj) => {
   const { state } = obj;

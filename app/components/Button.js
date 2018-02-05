@@ -18,6 +18,7 @@ class Button extends Component {
       chrome.tabs.sendMessage(tabs[0].id, { toggleSidebar: 'true' }, function (response) {
       });
     });
+    window.close();
   }
   render() {
     return (

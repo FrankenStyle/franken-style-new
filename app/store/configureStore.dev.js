@@ -7,7 +7,6 @@ import storage from '../utils/storage';
 /* eslint-disable no-underscore-dangle */
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ ?
   window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
-    // Options: http://zalmoxisus.github.io/redux-devtools-extension/API/Arguments.html
   }) :
   compose;
 /* eslint-enable no-underscore-dangle */

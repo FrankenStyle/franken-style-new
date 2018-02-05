@@ -6,10 +6,10 @@ html
     title Redux TodoMVC Example (Inject)
     style.
       html, body {
-        background-color: rgba(0,0,0,0)
+        background-color: rgba(0,0,0,0);
       }
   body
     #root
     if env !== 'prod'
       script(src='chrome-extension://lmhkpmbekcpmknklioeibfkpmmfibljd/js/redux-devtools-extension.js')
-    script(src=env == 'prod' ? '/js/todoapp.bundle.js' : 'https://localhost:3000/js/todoapp.bundle.js')
+    script(src=env == 'prod' ? '/js/main.bundle.js' : 'https://localhost:3000/js/main.bundle.js')

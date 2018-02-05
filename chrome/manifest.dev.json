@@ -24,14 +24,14 @@
           "<all_urls>"
         ],
         "all_frames": true,
-        "js": ["p5.js", "p5.dom.js",
-          "./js/content.bundle.js"
+        "js": ["./sketch/p5.js", "./sketch/p5.dom.js",
+          "./js/content.bundle.js", "./js/sketch.bundle.js"
         ],
         "css": [
           "./content.css"
         ]
       }
     ],
-  "permissions": [ "contextMenus", "management", "tabs", "storage", "<all_urls>" ],
+  "permissions": [ "management", "tabs", "storage", "<all_urls>" ],
   "content_security_policy": "default-src 'self'; script-src 'self' http://localhost:3000 https://localhost:3000 'unsafe-eval'; connect-src http://localhost:3000 https://localhost:3000; style-src * 'unsafe-inline' 'self' blob:; img-src 'self' data:;"
 }
