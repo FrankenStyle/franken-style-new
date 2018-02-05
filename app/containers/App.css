@@ -50,6 +50,16 @@ button {
   outline-width: 1px;
   outline-style: solid;
   outline-color:limegreen;
+
+}
+#buttons {
+  display:flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
+#buttons button{
+  cursor: pointer;
+  padding:5px;
 }
 
 #buttonClose {

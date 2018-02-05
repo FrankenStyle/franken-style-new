@@ -23,12 +23,15 @@ export default class App extends Component {
       element: 'Select an Element',
       highlight: false,
       sketchOn: false,
+      newCSS: '',
       currentUrl: ''
     };
 
     this.handleHighlightChange = this.handleHighlightChange.bind(this);
     this.handleSketchChange = this.handleSketchChange.bind(this);
     this.handleScreenCapture = this.handleScreenCapture.bind(this);
+    this.handleDownload = this.handleDownload.bind(this);
+    this.download = this.download.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.handleReset = this.handleReset.bind(this);
   }
@@ -50,6 +53,43 @@ export default class App extends Component {
       this.setState({ element: cssSelector });
       sendResponse({ test: 'test' });
     });
+  }
+
+  download(text) {
+    var element = document.createElement('a');
+    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+    element.setAttribute('download', 'style.css');
+    element.style.display = 'none';
+    element.click();
+    document.body.removeChild(element);
+  }
+
+  handleDownload() {
+    const promisifyGet = () =>
+      new Promise((resolve) => {
+        let newCSS='';
+        chrome.storage.local.get((result)=>{
+          const storeObj = JSON.parse(result.state);
+          const cssProperties = storeObj.cssProperties;
+          for (const tagNames in cssProperties) {
+            const propertiesArrayLength = cssProperties[tagNames].length-1;
+            const singleProperty = cssProperties[tagNames]; // array at tagname
+            const cssStyle = singleProperty[propertiesArrayLength];//most recently changed property
+            const className = tagNames.split('.');// [span, classname]
+            if (className.length===1){
+              newCSS += (tagNames + JSON.stringify(cssStyle) + '\n');
+            } else {
+              newCSS += ('.' + className[1] + JSON.stringify(cssStyle) + '\n');
+            }
+          }
+          newCSS = newCSS.replace(/['"]+/g, '')
+            .replace(/[,]+/g, ';')
+            .replace(/[}]+/g, ';}');//replaces quotes from JSON.stringify and format for css
+          resolve(newCSS);
+        });
+      });
+    promisifyGet().then(css => this.setState({ newCSS: css }))
+      .then(() => this.download(this.state.newCSS));
   }
 
   handleHighlightChange() {
@@ -146,47 +186,50 @@ export default class App extends Component {
               <img src="/img/camera.png" alt="Screen Capture" /> Screenshot
             </button>
           </div>
-
         </header>
+
         <div id={style.mainSection}>
-        <Tabs>
-          <TabList id={style.colorTab} >
-            <Tab className={style.tabStyle}>Color/Background</Tab>
-            <Tab className={style.tabStyle}>Flex</Tab>
-            <Tab className={style.tabStyle}>Text</Tab>
-            <Tab className={style.tabStyle}>Border</Tab>
-            <Tab className={style.tabStyle}>Position</Tab>
-            <Tab className={style.tabStyle}>Row</Tab>
-          </TabList>
-          <TabPanel>
-            <Colors element={this.state.element} />
-          </TabPanel>
-          <TabPanel>
-            <h2 className={style.selectColorTitle}>Coming Soon!</h2>
-          </TabPanel>
-          <TabPanel>
-            <h2 className={style.selectColorTitle}>Coming Soon!</h2>
-          </TabPanel>
-          <TabPanel>
-            <h2 className={style.selectColorTitle}>Coming Soon!</h2>
-          </TabPanel>
-          <TabPanel>
-            <h2 className={style.selectColorTitle}>Coming Soon!</h2>
-          </TabPanel>
-          <TabPanel>
-            <h2 className={style.selectColorTitle}>Coming Soon!</h2>
-          </TabPanel>
-        </Tabs>
-
-        <div id={style.footer}>
-          <button id={style.buttonReset} type="button" onClick={this.handleReset}>
-            <img src="/img/reset.png" alt="Reset" title="Reset Chrome Storage.." />
-          </button>
-          <input type="text" value={this.state.currentUrl} id={style.currentUrl} disabled />
+          <Tabs>
+            <TabList id={style.colorTab} >
+              <Tab className={style.tabStyle}>Color/Background</Tab>
+              <Tab className={style.tabStyle}>Flex</Tab>
+              <Tab className={style.tabStyle}>Text</Tab>
+              <Tab className={style.tabStyle}>Border</Tab>
+              <Tab className={style.tabStyle}>Position</Tab>
+              <Tab className={style.tabStyle}>Row</Tab>
+            </TabList>
+            <TabPanel>
+              <Colors element={this.state.element} />
+            </TabPanel>
+            <TabPanel>
+              <h2 className={style.selectColorTitle}>Coming Soon!</h2>
+            </TabPanel>
+            <TabPanel>
+              <h2 className={style.selectColorTitle}>Coming Soon!</h2>
+            </TabPanel>
+            <TabPanel>
+              <h2 className={style.selectColorTitle}>Coming Soon!</h2>
+            </TabPanel>
+            <TabPanel>
+              <h2 className={style.selectColorTitle}>Coming Soon!</h2>
+            </TabPanel>
+            <TabPanel>
+              <h2 className={style.selectColorTitle}>Coming Soon!</h2>
+            </TabPanel>
+          </Tabs>
+          
+          <div id={style.footer}>
+            <div id={style.buttons}>
+              <button id={style.buttonReset} type="button" onClick={this.handleReset}>
+                <img src="/img/reset.png" alt="Reset" title="Reset Chrome Storage.." />
+              </button>
+              <button id={style.buttonDownload} type="button" onClick= {this.handleDownload}>
+                <img src="/img/download.png" alt="Download" title="Download CSS File" />
+              </button>
+            </div>
+            <input type="text" value={this.state.currentUrl} id={style.currentUrl} disabled />
+          </div>
         </div>
-
-        </div>
-
       </div>
     );
   }
