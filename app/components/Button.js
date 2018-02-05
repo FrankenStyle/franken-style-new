@@ -8,12 +8,6 @@ class Button extends Component {
     this.handleClick = this.handleClick.bind(this);
   }
   handleClick() {
-    chrome.storage.local.clear(() => {
-      const error = chrome.runtime.lastError;
-      if (error) {
-        console.error(error);
-      }
-    });
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       chrome.tabs.sendMessage(tabs[0].id, { toggleSidebar: 'true' }, function (response) {
       });

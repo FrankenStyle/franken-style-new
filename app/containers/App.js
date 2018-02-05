@@ -23,7 +23,7 @@ export default class App extends Component {
       element: 'Select an Element',
       highlight: false,
       sketchOn: false,
-      newCss: '',
+      newCSS: '',
       currentUrl: ''
     };
 
@@ -40,26 +40,25 @@ export default class App extends Component {
     this.setState({ currentUrl: window.location.ancestorOrigins[0] });
     chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       let cssSelector;
-
       if (request.cssSelector) cssSelector = request.cssSelector;
-
       this.setState({ element: cssSelector });
       sendResponse({ test: 'test' });
     });
   }
+
   download(text) {
     var element = document.createElement('a');
     element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
     element.setAttribute('download', 'style.css');
     element.style.display = 'none';
     element.click();
-
     document.body.removeChild(element);
   }
+
   handleDownload() {
     const promisifyGet = () =>
       new Promise((resolve) => {
-        let newCss='';
+        let newCSS='';
         chrome.storage.local.get((result)=>{
           const storeObj = JSON.parse(result.state);
           const cssProperties = storeObj.cssProperties;
@@ -69,19 +68,19 @@ export default class App extends Component {
             const cssStyle = singleProperty[propertiesArrayLength];//most recently changed property
             const className = tagNames.split('.');// [span, classname]
             if (className.length===1){
-              newCss += (tagNames + JSON.stringify(cssStyle) + '\n');
+              newCSS += (tagNames + JSON.stringify(cssStyle) + '\n');
             } else {
-              newCss += ('.' + className[1] + JSON.stringify(cssStyle) + '\n');
+              newCSS += ('.' + className[1] + JSON.stringify(cssStyle) + '\n');
             }
           }
-          newCss = newCss.replace(/['"]+/g, '')
+          newCSS = newCSS.replace(/['"]+/g, '')
             .replace(/[,]+/g, ';')
             .replace(/[}]+/g, ';}');//replaces quotes from JSON.stringify and format for css
-          resolve(newCss);
+          resolve(newCSS);
         });
       });
-    promisifyGet().then(css => this.setState({ newCss: css }))
-      .then(() => this.download(this.state.newCss));
+    promisifyGet().then(css => this.setState({ newCSS: css }))
+      .then(() => this.download(this.state.newCSS));
   }
 
   handleHighlightChange() {
@@ -135,14 +134,6 @@ export default class App extends Component {
       });
     });
   }
-  handleResetStore(){
-    chrome.storage.local.clear(function() {
-      var error = chrome.runtime.lastError;
-      if (error) {
-          console.error(error);
-      }
-    });
-  }
 
   handleClose() {
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
@@ -186,48 +177,50 @@ export default class App extends Component {
               <img src="/img/camera.png" alt="Screen Capture" /> Screenshot
             </button>
           </div>
-
         </header>
+
         <div id={style.mainSection}>
-        <Tabs>
-          <TabList id={style.colorTab} >
-            <Tab className={style.tabStyle}>Color/Background</Tab>
-            <Tab className={style.tabStyle}>Flex</Tab>
-            <Tab className={style.tabStyle}>Text</Tab>
-            <Tab className={style.tabStyle}>Border</Tab>
-            <Tab className={style.tabStyle}>Position</Tab>
-            <Tab className={style.tabStyle}>Row</Tab>
-          </TabList>
-          <TabPanel>
-            <Colors element={this.state.element} />
-          </TabPanel>
-          <TabPanel>
-            <h2 className={style.selectColorTitle}>Coming Soon!</h2>
-          </TabPanel>
-          <TabPanel>
-            <h2 className={style.selectColorTitle}>Coming Soon!</h2>
-          </TabPanel>
-          <TabPanel>
-            <h2 className={style.selectColorTitle}>Coming Soon!</h2>
-          </TabPanel>
-          <TabPanel>
-            <h2 className={style.selectColorTitle}>Coming Soon!</h2>
-          </TabPanel>
-          <TabPanel>
-            <h2 className={style.selectColorTitle}>Coming Soon!</h2>
-          </TabPanel>
-        </Tabs>
-        <button onClick= {this.handleDownload}> Download CSS </button>
-
-        <div id={style.footer}>
-          <button id={style.buttonReset} type="button" onClick={this.handleReset}>
-            <img src="/img/reset.png" alt="Reset" title="Reset Chrome Storage.." />
-          </button>
-          <input type="text" value={this.state.currentUrl} id={style.currentUrl} disabled />
+          <Tabs>
+            <TabList id={style.colorTab} >
+              <Tab className={style.tabStyle}>Color/Background</Tab>
+              <Tab className={style.tabStyle}>Flex</Tab>
+              <Tab className={style.tabStyle}>Text</Tab>
+              <Tab className={style.tabStyle}>Border</Tab>
+              <Tab className={style.tabStyle}>Position</Tab>
+              <Tab className={style.tabStyle}>Row</Tab>
+            </TabList>
+            <TabPanel>
+              <Colors element={this.state.element} />
+            </TabPanel>
+            <TabPanel>
+              <h2 className={style.selectColorTitle}>Coming Soon!</h2>
+            </TabPanel>
+            <TabPanel>
+              <h2 className={style.selectColorTitle}>Coming Soon!</h2>
+            </TabPanel>
+            <TabPanel>
+              <h2 className={style.selectColorTitle}>Coming Soon!</h2>
+            </TabPanel>
+            <TabPanel>
+              <h2 className={style.selectColorTitle}>Coming Soon!</h2>
+            </TabPanel>
+            <TabPanel>
+              <h2 className={style.selectColorTitle}>Coming Soon!</h2>
+            </TabPanel>
+          </Tabs>
+          
+          <div id={style.footer}>
+            <div id={style.buttons}>
+              <button id={style.buttonReset} type="button" onClick={this.handleReset}>
+                <img src="/img/reset.png" alt="Reset" title="Reset Chrome Storage.." />
+              </button>
+              <button id={style.buttonDownload} type="button" onClick= {this.handleDownload}>
+                <img src="/img/download.png" alt="Download" title="Download CSS File" />
+              </button>
+            </div>
+            <input type="text" value={this.state.currentUrl} id={style.currentUrl} disabled />
+          </div>
         </div>
-
-        </div>
-
       </div>
     );
   }
