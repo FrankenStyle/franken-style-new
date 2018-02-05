@@ -57,12 +57,6 @@ button {
   justify-content: flex-start;
 }
 
-/* #buttonReset {
-  position: relative;
-  bottom:10px;
-  right:20px;
-} */
-
 #mainSection{
   display: flex;
   justify-content: space-between;
