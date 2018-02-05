@@ -23,12 +23,15 @@ export default class App extends Component {
       element: 'Select an Element',
       highlight: false,
       sketchOn: false,
+      newCss: '',
       currentUrl: ''
     };
 
     this.handleHighlightChange = this.handleHighlightChange.bind(this);
     this.handleSketchChange = this.handleSketchChange.bind(this);
     this.handleScreenCapture = this.handleScreenCapture.bind(this);
+    this.handleDownload = this.handleDownload.bind(this);
+    this.download = this.download.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.handleReset = this.handleReset.bind(this);
   }
@@ -43,6 +46,42 @@ export default class App extends Component {
       this.setState({ element: cssSelector });
       sendResponse({ test: 'test' });
     });
+  }
+  download(text) {
+    var element = document.createElement('a');
+    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+    element.setAttribute('download', 'style.css');
+    element.style.display = 'none';
+    element.click();
+
+    document.body.removeChild(element);
+  }
+  handleDownload() {
+    const promisifyGet = () =>
+      new Promise((resolve) => {
+        let newCss='';
+        chrome.storage.local.get((result)=>{
+          const storeObj = JSON.parse(result.state);
+          const cssProperties = storeObj.cssProperties;
+          for (const tagNames in cssProperties) {
+            const propertiesArrayLength = cssProperties[tagNames].length-1;
+            const singleProperty = cssProperties[tagNames]; // array at tagname
+            const cssStyle = singleProperty[propertiesArrayLength];//most recently changed property
+            const className = tagNames.split('.');// [span, classname]
+            if (className.length===1){
+              newCss += (tagNames + JSON.stringify(cssStyle) + '\n');
+            } else {
+              newCss += ('.' + className[1] + JSON.stringify(cssStyle) + '\n');
+            }
+          }
+          newCss = newCss.replace(/['"]+/g, '')
+            .replace(/[,]+/g, ';')
+            .replace(/[}]+/g, ';}');//replaces quotes from JSON.stringify and format for css
+          resolve(newCss);
+        });
+      });
+    promisifyGet().then(css => this.setState({ newCss: css }))
+      .then(() => this.download(this.state.newCss));
   }
 
   handleHighlightChange() {
@@ -94,6 +133,14 @@ export default class App extends Component {
           targetId = tab.id;
         });
       });
+    });
+  }
+  handleResetStore(){
+    chrome.storage.local.clear(function() {
+      var error = chrome.runtime.lastError;
+      if (error) {
+          console.error(error);
+      }
     });
   }
 
@@ -170,6 +217,7 @@ export default class App extends Component {
             <h2 className={style.selectColorTitle}>Coming Soon!</h2>
           </TabPanel>
         </Tabs>
+        <button onClick= {this.handleDownload}> Download CSS </button>
 
         <div id={style.footer}>
           <button id={style.buttonReset} type="button" onClick={this.handleReset}>
