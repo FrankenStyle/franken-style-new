@@ -208,3 +208,15 @@ input:checked + .slider:before {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
+
+/* ------------Border Styles------------- */
+#borderStyles {
+  width: 50%;
+}
+
+/* ------------Border Width------------- */
+#borderWidth {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
