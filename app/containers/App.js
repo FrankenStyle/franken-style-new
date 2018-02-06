@@ -95,6 +95,7 @@ export default class App extends Component {
   handleHighlightChange() {
     const highlight = !this.state.highlight;
     this.setState({ highlight });
+    //thunkify
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       chrome.tabs.sendMessage(tabs[0].id, { highlight }, (response) => {
       });
@@ -121,29 +122,27 @@ export default class App extends Component {
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       let id = tabs[0].id;
       chrome.tabs.sendMessage(tabs[0].id, { toggleSidebar: 'true' }, function (response) {
-      });
-      setTimeout(function(){
-      chrome.tabs.captureVisibleTab((screenshotUrl) => {
-        const viewTabUrl = chrome.extension.getURL(`/screenshot/screenshot.html?id=${id++}`);
-        let targetId = null;
-
-        chrome.tabs.onUpdated.addListener(function listener(tabId, changedProps) {
-          if (tabId != targetId || changedProps.status != 'complete') { return; }
-          chrome.tabs.onUpdated.removeListener(listener);
-          const views = chrome.extension.getViews();
-          for (let i = 0; i < views.length; i++) {
-            const view = views[i];
-            if (view.location.href == viewTabUrl) {
-              view.setScreenshotUrl(screenshotUrl);
-              break;
+        chrome.tabs.captureVisibleTab((screenshotUrl) => {
+          const viewTabUrl = chrome.extension.getURL(`/screenshot/screenshot.html?id=${id++}`);
+          let targetId = null;
+          
+          chrome.tabs.onUpdated.addListener(function listener(tabId, changedProps) {
+            if (tabId != targetId || changedProps.status != 'complete') { return; }
+            chrome.tabs.onUpdated.removeListener(listener);
+            const views = chrome.extension.getViews();
+            for (let i = 0; i < views.length; i++) {
+              const view = views[i];
+              if (view.location.href == viewTabUrl) {
+                view.setScreenshotUrl(screenshotUrl);
+                break;
+              }
             }
-          }
-        });
-        chrome.tabs.create({ url: viewTabUrl }, (tab) => {
-          targetId = tab.id;
+          });
+          chrome.tabs.create({ url: viewTabUrl }, (tab) => {
+            targetId = tab.id;
+          });
         });
       });
-    },250)
     });
   }
 

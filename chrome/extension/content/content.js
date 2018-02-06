@@ -74,6 +74,7 @@ chrome.storage.onChanged.addListener((changes) => {
     }
   }
 
+  //make tab specific
   const selectorHistory = changesArr[0].cssProperties[selectedElement] || [];
   const propertyObj = selectorHistory[selectorHistory.length - 1] || {};
   const elementList = document.querySelectorAll(selectedElement);

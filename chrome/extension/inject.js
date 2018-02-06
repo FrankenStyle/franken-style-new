@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import { render } from 'react-dom';
 import Dock from 'react-dock';
+//Does Dock have 'on hidden' property?
 
 class InjectApp extends Component {
   constructor(props) {
@@ -9,9 +10,9 @@ class InjectApp extends Component {
     this.state = { isVisible: false };
   }
   componentDidMount() {
-    chrome.runtime.onMessage.addListener((request) => {
+    chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       if (request.toggleSidebar === 'true') {
-        this.setState({ isVisible: !this.state.isVisible });
+        this.setState({ isVisible: !this.state.isVisible }, sendResponse);
       }
     });
   }
