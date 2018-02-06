@@ -24,12 +24,13 @@ function toggleSketch(turnOn) {
   if (turnOn) {
     p5Instance = newP5Instance();
   } else if (p5Instance) {
-    // p5Instance.remove();
+    p5Instance.remove();
   }
 }
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  const sketchOn = request.sketchOn || false;
+  const sketchOn = request.sketchOn;
+  console.log('SKETCH ON', sketchOn)
   if (sketchOn) {
     toggleSketch(true);
   }
