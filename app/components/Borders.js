@@ -61,6 +61,12 @@ export default class Borders extends Component {
   }
 
   render() {
+    const optionsArray = [
+      { value: 'px', label: 'px' },
+      { value: 'em', label: 'em' },
+      { value: '%', label: '%' },
+      { value: 'pt', label: 'pt' }
+    ];
     return (
       <form id={style.colorForm}>
         <h2 className={style.selectColorTitle}>Border Style</h2>
@@ -94,12 +100,7 @@ export default class Borders extends Component {
             name="valid-thickness-suffix"
             value={this.state.borderWidthSuffix}
             onChange={this.handleBorderWidthSuffixChange}
-            options={[
-              { value: 'px', label: 'px' },
-              { value: 'em', label: 'em' },
-              { value: '%', label: '%' },
-              { value: 'pt', label: 'pt' }
-            ]}
+            options={optionsArray}
           />
         </div>
       </form>

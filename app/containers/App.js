@@ -9,6 +9,7 @@ import Colors from '../components/Colors';
 import { promisifyGetCSS } from '../reducers/cssProperties';
 import Borders from '../components/Borders';
 import Texts from '../components/Texts';
+import Layouts from '../components/Layouts';
 
 @connect(
   state => ({
@@ -186,7 +187,7 @@ export default class App extends Component {
               <Tab className={style.tabStyle}>Flex</Tab>
               <Tab className={style.tabStyle}>Text</Tab>
               <Tab className={style.tabStyle}>Border</Tab>
-              <Tab className={style.tabStyle}>Position</Tab>
+              <Tab className={style.tabStyle}>Layout</Tab>
               <Tab className={style.tabStyle}>Row</Tab>
             </TabList>
             <TabPanel>
@@ -202,7 +203,7 @@ export default class App extends Component {
               <Borders element={this.state.element} />
             </TabPanel>
             <TabPanel>
-              <h2 className={style.selectColorTitle}>Coming Soon!</h2>
+              <Layouts element={this.state.element} />
             </TabPanel>
             <TabPanel>
               <h2 className={style.selectColorTitle}>Coming Soon!</h2>

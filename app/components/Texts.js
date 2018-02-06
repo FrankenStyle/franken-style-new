@@ -80,6 +80,12 @@ export default class Texts extends Component {
   }
 
   render() {
+    const optionsArray = [
+      { value: 'px', label: 'px' },
+      { value: 'em', label: 'em' },
+      { value: '%', label: '%' },
+      { value: 'pt', label: 'pt' }
+    ];
     return (
       <form id={style.colorForm}>
 
@@ -95,12 +101,7 @@ export default class Texts extends Component {
             name="valid-font-suffix"
             value={this.state.fontSizeSuffix}
             onChange={this.handleFontSizeSuffixChange}
-            options={[
-              { value: 'px', label: 'px' },
-              { value: 'em', label: 'em' },
-              { value: '%', label: '%' },
-              { value: 'pt', label: 'pt' }
-            ]}
+            options={optionsArray}
           />
         </div>
 

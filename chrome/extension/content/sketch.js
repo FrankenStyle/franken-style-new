@@ -7,6 +7,7 @@ function newP5Instance() {
       const canvas = sketch.createCanvas(sketch.windowWidth, sketch.windowHeight);
       canvas.position(0, 0);
       canvas.style('pointer-events', 'none');
+      canvas.style('z-index', '1000');
       sketch.clear();
     };
     sketch.draw = function () {
