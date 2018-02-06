@@ -22,7 +22,7 @@ class InjectApp extends Component {
         <Dock
           position="right"
           dimMode="none"
-          defaultSize={0.4}
+          size={0.3}
           isVisible={this.state.isVisible}
         >
           <iframe
