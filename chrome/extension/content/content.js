@@ -74,31 +74,41 @@ chrome.storage.onChanged.addListener((changes) => {
     }
   }
 
-  const selectorHistory = changesArr[0].cssProperties[selectedElement] || [];
-  const propertyObj = selectorHistory[selectorHistory.length - 1] || {};
-  const elementList = document.querySelectorAll(selectedElement);
+  let newCSS = '';
+  const storeObj = changesArr[0];
+  const cssProperties = storeObj.cssProperties;
+  for (const tagNames in cssProperties) {
+    const propertiesArrayLength = cssProperties[tagNames].length - 1;
+    const propertyHistory = cssProperties[tagNames];
+    const cssStyle = propertyHistory[propertiesArrayLength];
 
-  if (selectorHistory.length > 1) {
-    const previousPropertyObj = selectorHistory[selectorHistory.length - 2];
-    const diffObj = isEquivalent(previousPropertyObj, propertyObj);
+    newCSS += (`${tagNames + JSON.stringify(cssStyle)}\n`);
+  }
+  newCSS = newCSS.replace(/['"]+/g, '')
+    .replace(/[,]+/g, '!important;')
+    .replace(/[}]+/g, '!important;}');//replaces quotes from JSON.stringify and format for css
 
-    for (const key in diffObj) {
-      [].forEach.call(elementList, (header) => {
-        header.style[key] = diffObj[key];
-      });
-    }
+  function cssEngine(rule) {
+    const css = document.createElement('style'); // Creates <style></style>
+    css.type = 'text/css'; // Specifies the type
+    css.className = 'franken';
+    if (css.styleSheet) css.styleSheet.cssText = rule; // Support for IE
+    else css.appendChild(document.createTextNode(rule)); // Support for the rest
+    document.getElementsByTagName('head')[0].appendChild(css); // Specifies where to place the css
   }
 
-
-  if (Object.keys(changesArr[0].cssProperties).length === 0){
-    const selectorOldHistory = changesArr[1].cssProperties[selectedElement] || [];
-
-    Object.keys(changesArr[1].cssProperties).forEach(key => {
-      const elementOldList = document.querySelectorAll(key);
-        [].forEach.call(elementOldList, (header) => {
-          header.style = null;
-        });
+  function removeCSS() {
+    const stylesheets = document.querySelectorAll('style.franken');
+    console.log(stylesheets);
+    stylesheets.forEach((child) => {
+      document.getElementsByTagName('head')[0].removeChild(child);
     });
+  }
+
+  cssEngine(newCSS);
+
+  if (Object.keys(cssProperties).length === 0) {
+    removeCSS();
   }
 });
 
