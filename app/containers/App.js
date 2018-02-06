@@ -6,7 +6,7 @@ import { Tabs, Tab, TabList, TabPanel } from 'react-tabs';
 import * as cssActions from '../actions/cssProperties';
 import style from './App.css';
 import { promisifyGetCSS } from '../reducers/cssProperties';
-import { Borders, Colors, Flexbox, Texts } from '../components';
+import { Borders, Colors, Flexbox, Texts, Layouts } from '../components';
 
 @connect(
   state => ({
@@ -57,7 +57,7 @@ export default class App extends Component {
   }
 
   download(text) {
-    var element = document.createElement('a');
+    const element = document.createElement('a');
     element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
     element.setAttribute('download', 'style.css');
     element.style.display = 'none';
@@ -124,10 +124,8 @@ export default class App extends Component {
         chrome.tabs.create({ url: viewTabUrl }, (tab) => {
           targetId = tab.id;
         });
-
       });
-    },250)
-
+      }, 250);
     });
   }
 
@@ -184,7 +182,7 @@ export default class App extends Component {
               <Tab className={style.tabStyle}>Flex</Tab>
               <Tab className={style.tabStyle}>Text</Tab>
               <Tab className={style.tabStyle}>Border</Tab>
-              <Tab className={style.tabStyle}>Position</Tab>
+              <Tab className={style.tabStyle}>Layout</Tab>
               <Tab className={style.tabStyle}>Row</Tab>
             </TabList>
             <TabPanel>
@@ -200,7 +198,7 @@ export default class App extends Component {
               <Borders element={this.state.element} />
             </TabPanel>
             <TabPanel>
-              <h2 className={style.selectColorTitle}>Coming Soon!</h2>
+              <Layouts element={this.state.element} />
             </TabPanel>
             <TabPanel>
               <h2 className={style.selectColorTitle}>Coming Soon!</h2>
@@ -212,7 +210,7 @@ export default class App extends Component {
               <button id={style.buttonReset} type="button" onClick={this.handleReset}>
                 <img src="/img/reset.png" alt="Reset" title="Reset Chrome Storage.." />
               </button>
-              <button id={style.buttonDownload} type="button" onClick= {this.handleDownload}>
+              <button id={style.buttonDownload} type="button" onClick={this.handleDownload}>
                 <img src="/img/download.png" alt="Download" title="Download CSS File" />
               </button>
             </div>
