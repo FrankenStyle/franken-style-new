@@ -94,6 +94,13 @@ chrome.storage.onChanged.addListener((changes) => {
     css.className = 'franken';
     if (css.styleSheet) css.styleSheet.cssText = rule;
     else css.appendChild(document.createTextNode(rule));
+
+    const stylesheets = document.querySelectorAll('style.franken');
+    if (stylesheets.length) {
+      stylesheets.forEach((child) => {
+        document.getElementsByTagName('head')[0].removeChild(child);
+      });
+    }
     document.getElementsByTagName('head')[0].appendChild(css);
   }
 

@@ -5,11 +5,8 @@ import { connect } from 'react-redux';
 import { Tabs, Tab, TabList, TabPanel } from 'react-tabs';
 import * as cssActions from '../actions/cssProperties';
 import style from './App.css';
-import Colors from '../components/Colors';
 import { promisifyGetCSS } from '../reducers/cssProperties';
-import Borders from '../components/Borders';
-import Texts from '../components/Texts';
-import Layouts from '../components/Layouts';
+import { Borders, Colors, Flexbox, Texts, Layouts } from '../components';
 
 @connect(
   state => ({
@@ -60,7 +57,7 @@ export default class App extends Component {
   }
 
   download(text) {
-    var element = document.createElement('a');
+    const element = document.createElement('a');
     element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
     element.setAttribute('download', 'style.css');
     element.style.display = 'none';
@@ -127,10 +124,8 @@ export default class App extends Component {
         chrome.tabs.create({ url: viewTabUrl }, (tab) => {
           targetId = tab.id;
         });
-
       });
-    },250)
-
+      }, 250);
     });
   }
 
@@ -194,7 +189,7 @@ export default class App extends Component {
               <Colors element={this.state.element} />
             </TabPanel>
             <TabPanel>
-              <h2 className={style.selectColorTitle}>Coming Soon!</h2>
+              <Flexbox element={this.state.element} />
             </TabPanel>
             <TabPanel>
               <Texts element={this.state.element} />
@@ -215,7 +210,7 @@ export default class App extends Component {
               <button id={style.buttonReset} type="button" onClick={this.handleReset}>
                 <img src="/img/reset.png" alt="Reset" title="Reset Chrome Storage.." />
               </button>
-              <button id={style.buttonDownload} type="button" onClick= {this.handleDownload}>
+              <button id={style.buttonDownload} type="button" onClick={this.handleDownload}>
                 <img src="/img/download.png" alt="Download" title="Download CSS File" />
               </button>
             </div>
