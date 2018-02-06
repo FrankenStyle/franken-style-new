@@ -74,12 +74,6 @@ chrome.storage.onChanged.addListener((changes) => {
     }
   }
 
-<<<<<<< HEAD
-  //make tab specific
-  const selectorHistory = changesArr[0].cssProperties[selectedElement] || [];
-  const propertyObj = selectorHistory[selectorHistory.length - 1] || {};
-  const elementList = document.querySelectorAll(selectedElement);
-=======
   let newCSS = '';
   const storeObj = changesArr[0];
   const cssProperties = storeObj.cssProperties;
@@ -87,7 +81,6 @@ chrome.storage.onChanged.addListener((changes) => {
     const propertiesArrayLength = cssProperties[tagNames].length - 1;
     const propertyHistory = cssProperties[tagNames];
     const cssStyle = propertyHistory[propertiesArrayLength];
->>>>>>> master
 
     newCSS += (`${tagNames + JSON.stringify(cssStyle)}\n`);
   }

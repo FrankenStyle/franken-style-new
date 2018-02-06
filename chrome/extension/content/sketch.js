@@ -30,11 +30,10 @@ function toggleSketch(turnOn) {
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   const sketchOn = request.sketchOn;
-  console.log('SKETCH ON', sketchOn)
-  if (sketchOn) {
+  if (sketchOn === true) {
     toggleSketch(true);
   }
-  if (!sketchOn) {
+  if (sketchOn === false) {
     toggleSketch(false);
   }
 });
