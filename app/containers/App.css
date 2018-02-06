@@ -220,3 +220,8 @@ input:checked + .slider:before {
   flex-direction: row;
   justify-content: space-between;
 }
+
+/* ------------Font Family------------- */
+#fontFamily {
+   width: 50%;
+}

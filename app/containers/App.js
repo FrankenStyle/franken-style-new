@@ -8,6 +8,7 @@ import style from './App.css';
 import Colors from '../components/Colors';
 import { promisifyGetCSS } from '../reducers/cssProperties';
 import Borders from '../components/Borders';
+import Texts from '../components/Texts';
 
 @connect(
   state => ({
@@ -125,7 +126,7 @@ export default class App extends Component {
         chrome.tabs.create({ url: viewTabUrl }, (tab) => {
           targetId = tab.id;
         });
-        
+
       });
     },250)
 
@@ -195,7 +196,7 @@ export default class App extends Component {
               <h2 className={style.selectColorTitle}>Coming Soon!</h2>
             </TabPanel>
             <TabPanel>
-              <h2 className={style.selectColorTitle}>Coming Soon!</h2>
+              <Texts element={this.state.element} />
             </TabPanel>
             <TabPanel>
               <Borders element={this.state.element} />
