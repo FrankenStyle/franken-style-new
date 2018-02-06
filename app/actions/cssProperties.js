@@ -15,3 +15,11 @@ export function resetProperties() {
   };
 }
 
+export function removeProperty(tagName, property){
+  return {
+    type: types.REMOVE_PROPERTY,
+    tagName,
+    property
+  }
+}
+
