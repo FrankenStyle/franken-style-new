@@ -5,9 +5,8 @@ import { connect } from 'react-redux';
 import { Tabs, Tab, TabList, TabPanel } from 'react-tabs';
 import * as cssActions from '../actions/cssProperties';
 import style from './App.css';
-import Colors from '../components/Colors';
 import { promisifyGetCSS } from '../reducers/cssProperties';
-import Borders from '../components/Borders';
+import { Borders, Colors, Flexbox } from '../components';
 
 @connect(
   state => ({
@@ -186,7 +185,7 @@ export default class App extends Component {
               <Colors element={this.state.element} />
             </TabPanel>
             <TabPanel>
-              <h2 className={style.selectColorTitle}>Coming Soon!</h2>
+              <Flexbox element={this.state.element} />
             </TabPanel>
             <TabPanel>
               <h2 className={style.selectColorTitle}>Coming Soon!</h2>
