@@ -218,5 +218,15 @@ input:checked + .slider:before {
 #borderWidth {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: center;
+}
+
+/* ------------Border Width------------- */
+#fontSizeInput {
+  width: 50%;
+}
+
+/* ------------Font Family------------- */
+#fontFamily {
+   width: 50%;
 }

@@ -29,11 +29,11 @@ function toggleSketch(turnOn) {
 }
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  const sketchOn = request.sketchOn || false;
-  if (sketchOn) {
+  const sketchOn = request.sketchOn;
+  if (sketchOn === true) {
     toggleSketch(true);
   }
-  if (!sketchOn) {
+  if (sketchOn === false) {
     toggleSketch(false);
   }
 });

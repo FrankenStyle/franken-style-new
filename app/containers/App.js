@@ -7,6 +7,7 @@ import * as cssActions from '../actions/cssProperties';
 import style from './App.css';
 import { promisifyGetCSS } from '../reducers/cssProperties';
 import { Borders, Colors, Flexbox } from '../components';
+import Texts from '../components/Texts';
 
 @connect(
   state => ({
@@ -73,6 +74,7 @@ export default class App extends Component {
   handleHighlightChange() {
     const highlight = !this.state.highlight;
     this.setState({ highlight });
+    //thunkify
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       chrome.tabs.sendMessage(tabs[0].id, { highlight }, (response) => {
       });
@@ -98,8 +100,10 @@ export default class App extends Component {
   handleScreenCapture() {
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       let id = tabs[0].id;
+
       chrome.tabs.sendMessage(tabs[0].id, { toggleSidebar: 'true' }, function (response) {
       });
+
       setTimeout(function(){
       chrome.tabs.captureVisibleTab((screenshotUrl) => {
         const viewTabUrl = chrome.extension.getURL(`/screenshot/screenshot.html?id=${id++}`);
@@ -117,11 +121,14 @@ export default class App extends Component {
             }
           }
         });
+
         chrome.tabs.create({ url: viewTabUrl }, (tab) => {
           targetId = tab.id;
         });
+
       });
     },250)
+
     });
   }
 
@@ -188,7 +195,7 @@ export default class App extends Component {
               <Flexbox element={this.state.element} />
             </TabPanel>
             <TabPanel>
-              <h2 className={style.selectColorTitle}>Coming Soon!</h2>
+              <Texts element={this.state.element} />
             </TabPanel>
             <TabPanel>
               <Borders element={this.state.element} />
