@@ -47,7 +47,7 @@ export default class App extends Component {
       }
 
       if (request.clicked) {
-        const chekboxElement = document.getElementById("checkbox");
+        const chekboxElement = document.getElementById('checkbox');
         chekboxElement.click();
       }
 
@@ -58,7 +58,7 @@ export default class App extends Component {
 
   download(text) {
     const element = document.createElement('a');
-    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+    element.setAttribute('href', `data:text/plain;charset=utf-8,${  encodeURIComponent(text)}`);
     element.setAttribute('download', 'style.css');
     element.style.display = 'none';
     element.click();
@@ -73,7 +73,6 @@ export default class App extends Component {
   handleHighlightChange() {
     const highlight = !this.state.highlight;
     this.setState({ highlight });
-    //thunkify
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       chrome.tabs.sendMessage(tabs[0].id, { highlight }, (response) => {
       });
@@ -100,11 +99,11 @@ export default class App extends Component {
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       let id = tabs[0].id;
 
-      chrome.tabs.sendMessage(tabs[0].id, { toggleSidebar: 'true' }, function (response) {
+      chrome.tabs.sendMessage(tabs[0].id, { toggleSidebar: 'true' }, (response) => {
       });
 
-      setTimeout(function(){
-      chrome.tabs.captureVisibleTab((screenshotUrl) => {
+      setTimeout(() =>  {
+        chrome.tabs.captureVisibleTab((screenshotUrl) => {
         const viewTabUrl = chrome.extension.getURL(`/screenshot/screenshot.html?id=${id++}`);
         let targetId = null;
 
@@ -131,7 +130,7 @@ export default class App extends Component {
 
   handleClose() {
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-      chrome.tabs.sendMessage(tabs[0].id, { toggleSidebar: 'true' }, function (response) {
+      chrome.tabs.sendMessage(tabs[0].id, { toggleSidebar: 'true' }, (response) => {
       });
     });
   }
@@ -183,7 +182,6 @@ export default class App extends Component {
               <Tab className={style.tabStyle}>Text</Tab>
               <Tab className={style.tabStyle}>Border</Tab>
               <Tab className={style.tabStyle}>Layout</Tab>
-              <Tab className={style.tabStyle}>Row</Tab>
             </TabList>
             <TabPanel>
               <Colors element={this.state.element} />
@@ -199,9 +197,6 @@ export default class App extends Component {
             </TabPanel>
             <TabPanel>
               <Layouts element={this.state.element} />
-            </TabPanel>
-            <TabPanel>
-              <h2 className={style.selectColorTitle}>Coming Soon!</h2>
             </TabPanel>
           </Tabs>
 

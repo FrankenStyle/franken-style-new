@@ -214,15 +214,15 @@ input:checked + .slider:before {
   width: 50%;
 }
 
-/* ------------Border Width------------- */
-#borderWidth {
+/* ------------ Input ------------- */
+.inputContainer {
   display: flex;
   flex-direction: row;
   justify-content: center;
+  width: 50%;
 }
 
-/* ------------Border Width------------- */
-#fontSizeInput {
+.inputNumber {
   width: 50%;
 }
 
