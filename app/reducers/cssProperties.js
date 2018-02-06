@@ -1,4 +1,4 @@
-import { ADD_PROPERTY, RESET_PROPERTIES, CURRENT_CSS } from '../constants/ActionTypes';
+import { ADD_PROPERTY, RESET_PROPERTIES, CURRENT_CSS, REMOVE_PROPERTY } from '../constants/ActionTypes';
 
 const initialState = {};
 
@@ -57,6 +57,21 @@ export default function cssProperties(state = initialState, action) {
       };
     case RESET_PROPERTIES:
       return {};
+    case REMOVE_PROPERTY:
+      const tag= action.tagName;
+      const prop = action.property;
+      let oldState = {...state};
+      let lastIndexOfOldStateAtProperty = oldState[tag][oldState[tag].length-1]
+      let newLastIndexOfStateAtProperty = {};
+      for(let keys in lastIndexOfOldStateAtProperty){
+        if(keys !== prop){
+          newLastIndexOfStateAtProperty[keys] = lastIndexOfOldStateAtProperty[keys];
+        }
+      }
+      oldState[tag][oldState[tag].length-1] = newLastIndexOfStateAtProperty;
+      let newState = oldState;
+      return newState;
+      
     default:
       return state;
   }
