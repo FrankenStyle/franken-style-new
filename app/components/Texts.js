@@ -23,11 +23,17 @@ export default class Texts extends Component {
       fontSizeNumber: 15,
       fontSizeSuffix: 'px',
       fontFamily: 'Arial',
+      fontWeight: 'normal',
+      textTransform: 'none',
+      textDecoration: 'none'
     };
 
     this.handleFontSizeNumberChange = this.handleFontSizeNumberChange.bind(this);
     this.handleFontSizeSuffixChange = this.handleFontSizeSuffixChange.bind(this);
     this.handleFontFamilyChange = this.handleFontFamilyChange.bind(this);
+    this.handleFontWeightChange = this.handleFontWeightChange.bind(this);
+    this.handleTextTransformChange = this.handleTextTransformChange.bind(this);
+    this.handleTextDecorationChange = this.handleTextDecorationChange.bind(this);
   }
 
 
@@ -52,14 +58,39 @@ export default class Texts extends Component {
     actions.addProperty(element, 'font-family', selectedFontFamily);
   }
 
+  handleFontWeightChange(selectedOption) {
+    const { actions, element } = this.props;
+    const selectedFontWeight = selectedOption && selectedOption.value;
+    this.setState({ fontWeight: selectedFontWeight });
+    actions.addProperty(element, 'font-weight', selectedFontWeight);
+  }
+
+  handleTextTransformChange(selectedOption) {
+    const { actions, element } = this.props;
+    const selectedTextTransform = selectedOption && selectedOption.value;
+    this.setState({ textTransform: selectedTextTransform });
+    actions.addProperty(element, 'text-transform', selectedTextTransform);
+  }
+
+  handleTextDecorationChange(selectedOption) {
+    const { actions, element } = this.props;
+    const selectedTextDecoration = selectedOption && selectedOption.value;
+    this.setState({ textDecoration: selectedTextDecoration });
+    actions.addProperty(element, 'text-decoration', selectedTextDecoration);
+  }
+
   render() {
     return (
       <form id={style.colorForm}>
 
-
-        <h2 className={style.selectColorTitle}>Select Font Size</h2>
+        <h2 className={style.selectColorTitle}>Font Size</h2>
         <div id={style.borderWidth}>
-          <input type="text" value={this.state.fontSizeNumber} onChange={(event) => { this.handleFontSizeNumberChange(event); }} />
+          <input
+            type="text"
+            id={style.fontSizeInput}
+            value={this.state.fontSizeNumber}
+            onChange={(event) => { this.handleFontSizeNumberChange(event); }}
+          />
           <Select
             name="valid-font-suffix"
             value={this.state.fontSizeSuffix}
@@ -73,8 +104,7 @@ export default class Texts extends Component {
           />
         </div>
 
-
-        <h2 className={style.selectColorTitle}>Select Font Family</h2>
+        <h2 className={style.selectColorTitle}>Font Family</h2>
         <div id={style.fontFamily}>
           <Select
             name="valid-font-family"
@@ -89,6 +119,60 @@ export default class Texts extends Component {
               { value: 'Palatino', label: 'Palatino' },
               { value: 'Garamond', label: 'Garamond' },
               { value: 'Comic Sans MS', label: 'Comic Sans MS' }
+            ]}
+          />
+        </div>
+
+        <h2 className={style.selectColorTitle}>Font Weight</h2>
+        <div id={style.fontFamily}>
+          <Select
+            name="valid-font-weight"
+            value={this.state.fontWeight}
+            onChange={this.handleFontWeightChange}
+            options={[
+              { value: 'normal', label: 'normal' },
+              { value: 'bold', label: 'bold' },
+              { value: 'lighter', label: 'lighter' },
+              { value: 'bolder', label: 'bolder' },
+              { value: 'inherit', label: 'inherit' },
+              { value: 'initial', label: 'initial' },
+              { value: 'unset', label: 'unset' }
+            ]}
+          />
+        </div>
+
+        <h2 className={style.selectColorTitle}>Text Transformation</h2>
+        <div id={style.fontFamily}>
+          <Select
+            name="valid-font-weight"
+            value={this.state.textTransform}
+            onChange={this.handleTextTransformChange}
+            options={[
+              { value: 'none', label: 'none' },
+              { value: 'capitalize', label: 'capitalize' },
+              { value: 'lowercase', label: 'lowercase' },
+              { value: 'uppercase', label: 'uppercase' },
+              { value: 'initial', label: 'initial' },
+              { value: 'inherit', label: 'inherit' },
+              { value: 'unset', label: 'unset' }
+            ]}
+          />
+        </div>
+
+        <h2 className={style.selectColorTitle}>Text Decoration</h2>
+        <div id={style.fontFamily}>
+          <Select
+            name="valid-font-weight"
+            value={this.state.textDecoration}
+            onChange={this.handleTextDecorationChange}
+            options={[
+              { value: 'none', label: 'none' },
+              { value: 'underline', label: 'underline' },
+              { value: 'line-through', label: 'line-through' },
+              { value: 'overline', label: 'overline' },
+              { value: 'initial', label: 'initial' },
+              { value: 'inherit', label: 'inherit' },
+              { value: 'unset', label: 'unset' }
             ]}
           />
         </div>
