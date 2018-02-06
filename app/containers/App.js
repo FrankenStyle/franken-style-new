@@ -6,8 +6,7 @@ import { Tabs, Tab, TabList, TabPanel } from 'react-tabs';
 import * as cssActions from '../actions/cssProperties';
 import style from './App.css';
 import { promisifyGetCSS } from '../reducers/cssProperties';
-import { Borders, Colors, Flexbox } from '../components';
-import Texts from '../components/Texts';
+import { Borders, Colors, Flexbox, Texts } from '../components';
 
 @connect(
   state => ({
