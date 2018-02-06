@@ -14,3 +14,4 @@ export function resetProperties() {
     type: types.RESET_PROPERTIES
   };
 }
+
