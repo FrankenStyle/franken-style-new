@@ -86,20 +86,19 @@ chrome.storage.onChanged.addListener((changes) => {
   }
   newCSS = newCSS.replace(/['"]+/g, '')
     .replace(/[,]+/g, '!important;')
-    .replace(/[}]+/g, '!important;}');//replaces quotes from JSON.stringify and format for css
+    .replace(/[}]+/g, '!important;}');
 
   function cssEngine(rule) {
-    const css = document.createElement('style'); // Creates <style></style>
-    css.type = 'text/css'; // Specifies the type
+    const css = document.createElement('style');
+    css.type = 'text/css';
     css.className = 'franken';
-    if (css.styleSheet) css.styleSheet.cssText = rule; // Support for IE
-    else css.appendChild(document.createTextNode(rule)); // Support for the rest
-    document.getElementsByTagName('head')[0].appendChild(css); // Specifies where to place the css
+    if (css.styleSheet) css.styleSheet.cssText = rule;
+    else css.appendChild(document.createTextNode(rule));
+    document.getElementsByTagName('head')[0].appendChild(css);
   }
 
   function removeCSS() {
     const stylesheets = document.querySelectorAll('style.franken');
-    console.log(stylesheets);
     stylesheets.forEach((child) => {
       document.getElementsByTagName('head')[0].removeChild(child);
     });
