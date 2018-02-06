@@ -74,6 +74,7 @@ export default class App extends Component {
   handleHighlightChange() {
     const highlight = !this.state.highlight;
     this.setState({ highlight });
+    //thunkify
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       chrome.tabs.sendMessage(tabs[0].id, { highlight }, (response) => {
       });
@@ -99,8 +100,10 @@ export default class App extends Component {
   handleScreenCapture() {
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       let id = tabs[0].id;
+
       chrome.tabs.sendMessage(tabs[0].id, { toggleSidebar: 'true' }, function (response) {
       });
+
       setTimeout(function(){
       chrome.tabs.captureVisibleTab((screenshotUrl) => {
         const viewTabUrl = chrome.extension.getURL(`/screenshot/screenshot.html?id=${id++}`);
@@ -118,11 +121,14 @@ export default class App extends Component {
             }
           }
         });
+
         chrome.tabs.create({ url: viewTabUrl }, (tab) => {
           targetId = tab.id;
         });
+        
       });
     },250)
+
     });
   }
 
