@@ -25,7 +25,10 @@ export default class Layouts extends Component {
       heightSuffix: 'px',
       widthNumber: 10,
       widthSuffix: 'px',
-
+      marginNumber: 2,
+      marginSuffix: 'px',
+      paddingNumber: 2,
+      paddingSuffix: 'px'
     };
 
     this.handleVisibilityChange = this.handleVisibilityChange.bind(this);
@@ -33,6 +36,8 @@ export default class Layouts extends Component {
     this.handleHeightSuffixChange = this.handleHeightSuffixChange.bind(this);
     this.handleWidthNumberChange = this.handleWidthNumberChange.bind(this);
     this.handleWidthSuffixChange = this.handleWidthSuffixChange.bind(this);
+    this.handleMarginNumberChange = this.handleMarginNumberChange.bind(this);
+    this.handleMarginSuffixChange = this.handleMarginSuffixChange.bind(this);
   }
 
   handleVisibilityChange() {
@@ -71,6 +76,34 @@ export default class Layouts extends Component {
     actions.addProperty(element, 'width', this.state.widthNumber + selectedSuffix);
   }
 
+  handleMarginNumberChange(event) {
+    const marginNumber = event.target.value;
+    this.setState({ marginNumber });
+    const { actions, element } = this.props;
+    actions.addProperty(element, 'margin', marginNumber + this.state.marginSuffix);
+  }
+
+  handleMarginSuffixChange(selectedOption) {
+    const { actions, element } = this.props;
+    const selectedSuffix = selectedOption && selectedOption.value;
+    this.setState({ marginSuffix: selectedSuffix });
+    actions.addProperty(element, 'margin', this.state.marginNumber + selectedSuffix);
+  }
+
+  handlePaddingNumberChange(event) {
+    const paddingNumber = event.target.value;
+    this.setState({ paddingNumber });
+    const { actions, element } = this.props;
+    actions.addProperty(element, 'padding', paddingNumber + this.state.paddingSuffix);
+  }
+
+  handlePaddingSuffixChange(selectedOption) {
+    const { actions, element } = this.props;
+    const selectedSuffix = selectedOption && selectedOption.value;
+    this.setState({ paddingSuffix: selectedSuffix });
+    actions.addProperty(element, 'padding', this.state.paddingNumber + selectedSuffix);
+  }
+
   render() {
     const optionsArray = [
       { value: 'px', label: 'px' },
@@ -84,21 +117,22 @@ export default class Layouts extends Component {
         <div id={style.borderStyles}>
           <div id={style.toggleShrinker}>
             <label className={style.switch}>
-              <input id="checkbox" type="checkbox" onChange={() => { this.handleVisibilityChange(); }} />
+              <input id="checkbox-visibility" type="checkbox" onChange={() => { this.handleVisibilityChange(); }} />
               <span className={[style.slider, style.round].join(' ')} />
             </label>
           </div>
         </div>
 
         <h2 className={style.selectColorTitle}>Height</h2>
-        <div id={style.borderWidth}>
+        <div className={style.inputContainer}>
           <input
             type="text"
-            id={style.fontSizeInput}
+            className={style.inputNumber}
             value={this.state.heightNumber}
             onChange={(event) => { this.handleHeightNumberChange(event); }}
           />
           <Select
+            clearable={false}
             name="valid-height-suffix"
             value={this.state.heightSuffix}
             onChange={this.handleHeightSuffixChange}
@@ -107,17 +141,52 @@ export default class Layouts extends Component {
         </div>
 
         <h2 className={style.selectColorTitle}>Width</h2>
-        <div id={style.borderWidth}>
+        <div className={style.inputContainer}>
           <input
             type="text"
-            id={style.fontSizeInput}
+            className={style.inputNumber}
             value={this.state.widthNumber}
             onChange={(event) => { this.handleWidthNumberChange(event); }}
           />
           <Select
+            clearable={false}
             name="valid-width-suffix"
             value={this.state.widthSuffix}
             onChange={this.handleWidthSuffixChange}
+            options={optionsArray}
+          />
+        </div>
+
+        <h2 className={style.selectColorTitle}>Margin</h2>
+        <div className={style.inputContainer}>
+          <input
+            type="text"
+            className={style.inputNumber}
+            value={this.state.marginNumber}
+            onChange={(event) => { this.handleMarginNumberChange(event); }}
+          />
+          <Select
+            clearable={false}
+            name="valid-margin-suffix"
+            value={this.state.marginSuffix}
+            onChange={this.handleMarginSuffixChange}
+            options={optionsArray}
+          />
+        </div>
+
+        <h2 className={style.selectColorTitle}>Padding</h2>
+        <div className={style.inputContainer}>
+          <input
+            type="text"
+            className={style.inputNumber}
+            value={this.state.paddingNumber}
+            onChange={(event) => { this.handlePaddingNumberChange(event); }}
+          />
+          <Select
+            clearable={false}
+            name="valid-padding-suffix"
+            value={this.state.paddingSuffix}
+            onChange={this.handlePaddingSuffixChange}
             options={optionsArray}
           />
         </div>
