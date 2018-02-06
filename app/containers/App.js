@@ -6,6 +6,7 @@ import { Tabs, Tab, TabList, TabPanel } from 'react-tabs';
 import * as cssActions from '../actions/cssProperties';
 import style from './App.css';
 import Colors from '../components/Colors';
+import Borders from '../components/Borders';
 
 @connect(
   state => ({
@@ -163,6 +164,8 @@ export default class App extends Component {
       <div className={style.App}>
         <header className={style.appHeader}>
           <link rel="stylesheet" href="https://unpkg.com/react-tabs@2/style/react-tabs.css" />
+          <link rel="stylesheet" href="https://unpkg.com/react-select/dist/react-select.css" />
+
           <button id={style.buttonClose} type="button" onClick={this.handleClose}>
             <img src="/img/close.png" alt="Close" />
           </button>
@@ -210,7 +213,7 @@ export default class App extends Component {
               <h2 className={style.selectColorTitle}>Coming Soon!</h2>
             </TabPanel>
             <TabPanel>
-              <h2 className={style.selectColorTitle}>Coming Soon!</h2>
+              <Borders element={this.state.element} />
             </TabPanel>
             <TabPanel>
               <h2 className={style.selectColorTitle}>Coming Soon!</h2>
@@ -219,7 +222,7 @@ export default class App extends Component {
               <h2 className={style.selectColorTitle}>Coming Soon!</h2>
             </TabPanel>
           </Tabs>
-          
+
           <div id={style.footer}>
             <div id={style.buttons}>
               <button id={style.buttonReset} type="button" onClick={this.handleReset}>
