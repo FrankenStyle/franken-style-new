@@ -6,6 +6,7 @@ import { Tabs, Tab, TabList, TabPanel } from 'react-tabs';
 import * as cssActions from '../actions/cssProperties';
 import style from './App.css';
 import Colors from '../components/Colors';
+import { promisifyGetCSS } from '../reducers/cssProperties';
 import Borders from '../components/Borders';
 
 @connect(
@@ -66,30 +67,7 @@ export default class App extends Component {
   }
 
   handleDownload() {
-    const promisifyGet = () =>
-      new Promise((resolve) => {
-        let newCSS='';
-        chrome.storage.local.get((result)=>{
-          const storeObj = JSON.parse(result.state);
-          const cssProperties = storeObj.cssProperties;
-          for (const tagNames in cssProperties) {
-            const propertiesArrayLength = cssProperties[tagNames].length-1;
-            const singleProperty = cssProperties[tagNames]; // array at tagname
-            const cssStyle = singleProperty[propertiesArrayLength];//most recently changed property
-            const className = tagNames.split('.');// [span, classname]
-            if (className.length===1){
-              newCSS += (tagNames + JSON.stringify(cssStyle) + '\n');
-            } else {
-              newCSS += ('.' + className[1] + JSON.stringify(cssStyle) + '\n');
-            }
-          }
-          newCSS = newCSS.replace(/['"]+/g, '')
-            .replace(/[,]+/g, ';')
-            .replace(/[}]+/g, ';}');//replaces quotes from JSON.stringify and format for css
-          resolve(newCSS);
-        });
-      });
-    promisifyGet().then(css => this.setState({ newCSS: css }))
+    promisifyGetCSS().then(css => this.setState({ newCSS: css }))
       .then(() => this.download(this.state.newCSS));
   }
 
