@@ -6,7 +6,7 @@ import { Tabs, Tab, TabList, TabPanel } from 'react-tabs';
 import * as cssActions from '../actions/cssProperties';
 import style from './App.css';
 import { promisifyGetCSS } from '../reducers/cssProperties';
-import { Borders, Colors, Flexbox, Texts } from '../components';
+import { Borders, Colors, Flexbox, Texts, Layouts } from '../components';
 
 @connect(
   state => ({
@@ -47,7 +47,7 @@ export default class App extends Component {
       }
 
       if (request.clicked) {
-        const chekboxElement = document.getElementById("checkbox");
+        const chekboxElement = document.getElementById('checkbox');
         chekboxElement.click();
       }
 
@@ -57,8 +57,8 @@ export default class App extends Component {
   }
 
   download(text) {
-    var element = document.createElement('a');
-    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+    const element = document.createElement('a');
+    element.setAttribute('href', `data:text/plain;charset=utf-8,${  encodeURIComponent(text)}`);
     element.setAttribute('download', 'style.css');
     element.style.display = 'none';
     element.click();
@@ -73,7 +73,6 @@ export default class App extends Component {
   handleHighlightChange() {
     const highlight = !this.state.highlight;
     this.setState({ highlight });
-    //thunkify
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       chrome.tabs.sendMessage(tabs[0].id, { highlight }, (response) => {
       });
@@ -100,11 +99,11 @@ export default class App extends Component {
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       let id = tabs[0].id;
 
-      chrome.tabs.sendMessage(tabs[0].id, { toggleSidebar: 'true' }, function (response) {
+      chrome.tabs.sendMessage(tabs[0].id, { toggleSidebar: 'true' }, (response) => {
       });
 
-      setTimeout(function(){
-      chrome.tabs.captureVisibleTab((screenshotUrl) => {
+      setTimeout(() =>  {
+        chrome.tabs.captureVisibleTab((screenshotUrl) => {
         const viewTabUrl = chrome.extension.getURL(`/screenshot/screenshot.html?id=${id++}`);
         let targetId = null;
 
@@ -124,16 +123,14 @@ export default class App extends Component {
         chrome.tabs.create({ url: viewTabUrl }, (tab) => {
           targetId = tab.id;
         });
-
       });
-    },250)
-
+      }, 250);
     });
   }
 
   handleClose() {
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-      chrome.tabs.sendMessage(tabs[0].id, { toggleSidebar: 'true' }, function (response) {
+      chrome.tabs.sendMessage(tabs[0].id, { toggleSidebar: 'true' }, (response) => {
       });
     });
   }
@@ -184,8 +181,7 @@ export default class App extends Component {
               <Tab className={style.tabStyle}>Flex</Tab>
               <Tab className={style.tabStyle}>Text</Tab>
               <Tab className={style.tabStyle}>Border</Tab>
-              <Tab className={style.tabStyle}>Position</Tab>
-              <Tab className={style.tabStyle}>Row</Tab>
+              <Tab className={style.tabStyle}>Layout</Tab>
             </TabList>
             <TabPanel>
               <Colors element={this.state.element} />
@@ -200,10 +196,7 @@ export default class App extends Component {
               <Borders element={this.state.element} />
             </TabPanel>
             <TabPanel>
-              <h2 className={style.selectColorTitle}>Coming Soon!</h2>
-            </TabPanel>
-            <TabPanel>
-              <h2 className={style.selectColorTitle}>Coming Soon!</h2>
+              <Layouts element={this.state.element} />
             </TabPanel>
           </Tabs>
 
@@ -212,7 +205,7 @@ export default class App extends Component {
               <button id={style.buttonReset} type="button" onClick={this.handleReset}>
                 <img src="/img/reset.png" alt="Reset" title="Reset Chrome Storage.." />
               </button>
-              <button id={style.buttonDownload} type="button" onClick= {this.handleDownload}>
+              <button id={style.buttonDownload} type="button" onClick={this.handleDownload}>
                 <img src="/img/download.png" alt="Download" title="Download CSS File" />
               </button>
             </div>

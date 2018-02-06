@@ -80,33 +80,37 @@ export default class Texts extends Component {
   }
 
   render() {
+    const optionsArray = [
+      { value: 'px', label: 'px' },
+      { value: 'em', label: 'em' },
+      { value: '%', label: '%' },
+      { value: 'pt', label: 'pt' }
+    ];
     return (
       <form id={style.colorForm}>
 
         <h2 className={style.selectColorTitle}>Font Size</h2>
-        <div id={style.borderWidth}>
+        <div className={style.inputContainer}>
           <input
             type="text"
+            className={style.inputNumber}
             id={style.fontSizeInput}
             value={this.state.fontSizeNumber}
             onChange={(event) => { this.handleFontSizeNumberChange(event); }}
           />
           <Select
+            clearable={false}
             name="valid-font-suffix"
             value={this.state.fontSizeSuffix}
             onChange={this.handleFontSizeSuffixChange}
-            options={[
-              { value: 'px', label: 'px' },
-              { value: 'em', label: 'em' },
-              { value: '%', label: '%' },
-              { value: 'pt', label: 'pt' }
-            ]}
+            options={optionsArray}
           />
         </div>
 
         <h2 className={style.selectColorTitle}>Font Family</h2>
         <div id={style.fontFamily}>
           <Select
+            clearable={false}
             name="valid-font-family"
             value={this.state.fontFamily}
             onChange={this.handleFontFamilyChange}
@@ -126,6 +130,7 @@ export default class Texts extends Component {
         <h2 className={style.selectColorTitle}>Font Weight</h2>
         <div id={style.fontFamily}>
           <Select
+            clearable={false}
             name="valid-font-weight"
             value={this.state.fontWeight}
             onChange={this.handleFontWeightChange}
@@ -144,6 +149,7 @@ export default class Texts extends Component {
         <h2 className={style.selectColorTitle}>Text Transformation</h2>
         <div id={style.fontFamily}>
           <Select
+            clearable={false}
             name="valid-font-weight"
             value={this.state.textTransform}
             onChange={this.handleTextTransformChange}
@@ -162,6 +168,7 @@ export default class Texts extends Component {
         <h2 className={style.selectColorTitle}>Text Decoration</h2>
         <div id={style.fontFamily}>
           <Select
+            clearable={false}
             name="valid-font-weight"
             value={this.state.textDecoration}
             onChange={this.handleTextDecorationChange}

@@ -21,7 +21,7 @@ export default class Borders extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      borderStyle: 'solid',
+      borderStyle: 'none',
       borderColor: '#FA1A1A',
       borderWidthNumber: '10',
       borderWidthSuffix: 'px'
@@ -61,15 +61,24 @@ export default class Borders extends Component {
   }
 
   render() {
+    const optionsArray = [
+      { value: 'px', label: 'px' },
+      { value: 'em', label: 'em' },
+      { value: '%', label: '%' },
+      { value: 'pt', label: 'pt' }
+    ];
     return (
       <form id={style.colorForm}>
-        <h2 className={style.selectColorTitle}>Border Style</h2>
+
+        <h2 className={style.selectColorTitle}>Style</h2>
         <div id={style.borderStyles}>
           <Select
+            clearable={false}
             name="valid-border-styles"
             value={this.state.borderStyle}
             onChange={this.handleBorderStyleChange}
             options={[
+              { value: 'none', label: 'none' },
               { value: 'dotted', label: 'dotted' },
               { value: 'dashed', label: 'dashed' },
               { value: 'solid', label: 'solid' },
@@ -78,30 +87,30 @@ export default class Borders extends Component {
               { value: 'ridge', label: 'ridge' },
               { value: 'inset', label: 'inset' },
               { value: 'outset', label: 'outset' },
-              { value: 'none', label: 'none' },
               { value: 'hidden', label: 'hidden' }
             ]}
           />
         </div>
 
-        <h2 className={style.selectColorTitle}>Border Color</h2>
-        <ColorPicker color={this.state.borderColor} onChangeHandler={this.handleBorderColorChange} />
-
-        <h2 className={style.selectColorTitle}>Border Width</h2>
-        <div id={style.borderWidth}>
-          <input type="text" value={this.state.borderWidthNumber} onChange={(event) => { this.handleBorderWidthNumberChange(event); }} />
+        <h2 className={style.selectColorTitle}>Width</h2>
+        <div className={style.inputContainer}>
+          <input
+            className={style.inputContainer}
+            type="text"
+            value={this.state.borderWidthNumber}
+            onChange={(event) => { this.handleBorderWidthNumberChange(event); }}
+          />
           <Select
+            clearable={false}
             name="valid-thickness-suffix"
             value={this.state.borderWidthSuffix}
             onChange={this.handleBorderWidthSuffixChange}
-            options={[
-              { value: 'px', label: 'px' },
-              { value: 'em', label: 'em' },
-              { value: '%', label: '%' },
-              { value: 'pt', label: 'pt' }
-            ]}
+            options={optionsArray}
           />
         </div>
+
+        <h2 className={style.selectColorTitle}>Color</h2>
+        <ColorPicker color={this.state.borderColor} onChangeHandler={this.handleBorderColorChange} />
       </form>
     );
   }
