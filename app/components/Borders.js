@@ -57,13 +57,13 @@ export default class Borders extends Component {
     const { actions, element } = this.props;
     const selectedSuffix = selectedOption && selectedOption.value;
     this.setState({ borderWidthSuffix: selectedSuffix });
-    actions.addProperty(element, 'border-width', this.state.borderWidthNumber + selectedSuffix );
+    actions.addProperty(element, 'border-width', this.state.borderWidthNumber + selectedSuffix);
   }
 
   render() {
     return (
       <form id={style.colorForm}>
-        <h2 className={style.selectColorTitle}>Select Border Style</h2>
+        <h2 className={style.selectColorTitle}>Border Style</h2>
         <div id={style.borderStyles}>
           <Select
             name="valid-border-styles"
@@ -84,12 +84,12 @@ export default class Borders extends Component {
           />
         </div>
 
-        <h2 className={style.selectColorTitle}>Select Border Color</h2>
+        <h2 className={style.selectColorTitle}>Border Color</h2>
         <ColorPicker color={this.state.borderColor} onChangeHandler={this.handleBorderColorChange} />
 
-        <h2 className={style.selectColorTitle}>Select Border Width</h2>
+        <h2 className={style.selectColorTitle}>Border Width</h2>
         <div id={style.borderWidth}>
-          <input type="text" value={this.state.borderWidthNumber} onChange={(event) => { this.handleBorderWidthNumberChange(event); }}  />
+          <input type="text" value={this.state.borderWidthNumber} onChange={(event) => { this.handleBorderWidthNumberChange(event); }} />
           <Select
             name="valid-thickness-suffix"
             value={this.state.borderWidthSuffix}
