@@ -39,7 +39,6 @@ export default class App extends Component {
   }
 
   componentDidMount() {
-    console.log('skadfhljdshfljhalj')
     this.handleReset()
     this.setState({ currentUrl: window.location.ancestorOrigins[0] });
     chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
@@ -58,13 +57,6 @@ export default class App extends Component {
       this.setState({ element: cssSelector });
       sendResponse({ test: 'test' });
     });
-
-    // function handleRemoved(tabId){
-    //  this.handleReset();
-    // }
-    // chrome.tabs.onRemoved.addListener(handleRemoved)
-
-
   }
 
   componentWillUnmount(){
