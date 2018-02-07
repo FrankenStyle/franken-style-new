@@ -41,14 +41,17 @@ export default class Colors extends Component {
   }
 
   render() {
+    const isElementSelected = this.props.isElementSelected;
     return (
-      <form id={style.colorForm}>
-        <h2 className={style.selectColorTitle}>Font Color</h2>
-        <ColorPicker color={this.state.color} onChangeHandler={this.handleColorChange} />
+      <div className={!isElementSelected ? style.disabled : ''}>
+        <form id={style.colorForm}>
+          <h2 className={style.selectColorTitle}>Font Color</h2>
+          <ColorPicker color={this.state.color} onChangeHandler={this.handleColorChange} />
 
-        <h2 className={style.selectColorTitle}>Background Color</h2>
-        <ColorPicker color={this.state.backgroundColor} onChangeHandler={this.handleBackgroundColorChange} />
-      </form>
+          <h2 className={style.selectColorTitle}>Background Color</h2>
+          <ColorPicker color={this.state.backgroundColor} onChangeHandler={this.handleBackgroundColorChange} />
+        </form>
+      </div>
     );
   }
 }

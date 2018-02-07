@@ -92,8 +92,9 @@ class Flexbox extends Component {
     }  }
 
   render() {
+    const isElementSelected = this.props.isElementSelected;
     return (
-      <div>
+      <div className={!isElementSelected ? style.disabled : ''}>
         <h2 className={style.selectColorTitle}>Enable Flex-Box</h2>
         <div id={style.elementSelector}>
           <div id={style.toggleShrinker}>

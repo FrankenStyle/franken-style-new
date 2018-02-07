@@ -25,7 +25,8 @@ export default class App extends Component {
       highlight: false,
       sketchOn: false,
       newCSS: '',
-      currentUrl: ''
+      currentUrl: '',
+      isElementSelected: false
     };
 
     this.handleHighlightChange = this.handleHighlightChange.bind(this);
@@ -47,6 +48,7 @@ export default class App extends Component {
       }
 
       if (request.clicked) {
+        this.setState({ isElementSelected: true });
         const chekboxElement = document.getElementById('checkbox');
         chekboxElement.click();
       }
@@ -73,6 +75,9 @@ export default class App extends Component {
   handleHighlightChange() {
     const highlight = !this.state.highlight;
     this.setState({ highlight });
+    if (highlight && this.state.isElementSelected) {
+      this.setState({ isElementSelected: false });
+    }
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       chrome.tabs.sendMessage(tabs[0].id, { highlight }, (response) => {
       });
@@ -184,19 +189,19 @@ export default class App extends Component {
               <Tab className={style.tabStyle}>Layout</Tab>
             </TabList>
             <TabPanel>
-              <Colors element={this.state.element} />
+              <Colors element={this.state.element} isElementSelected={this.state.isElementSelected} />
             </TabPanel>
             <TabPanel>
-              <Flexbox element={this.state.element} />
+              <Flexbox element={this.state.element} isElementSelected={this.state.isElementSelected} />
             </TabPanel>
             <TabPanel>
-              <Texts element={this.state.element} />
+              <Texts element={this.state.element} isElementSelected={this.state.isElementSelected} />
             </TabPanel>
             <TabPanel>
-              <Borders element={this.state.element} />
+              <Borders element={this.state.element} isElementSelected={this.state.isElementSelected} />
             </TabPanel>
             <TabPanel>
-              <Layouts element={this.state.element} />
+              <Layouts element={this.state.element} isElementSelected={this.state.isElementSelected} />
             </TabPanel>
           </Tabs>
 

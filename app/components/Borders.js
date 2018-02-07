@@ -67,51 +67,54 @@ export default class Borders extends Component {
       { value: '%', label: '%' },
       { value: 'pt', label: 'pt' }
     ];
+    const isElementSelected = this.props.isElementSelected;
     return (
-      <form id={style.colorForm}>
+      <div className={!isElementSelected ? style.disabled : ''}>
+        <form id={style.colorForm}>
 
-        <h2 className={style.selectColorTitle}>Style</h2>
-        <div id={style.borderStyles}>
-          <Select
-            clearable={false}
-            name="valid-border-styles"
-            value={this.state.borderStyle}
-            onChange={this.handleBorderStyleChange}
-            options={[
-              { value: 'none', label: 'none' },
-              { value: 'dotted', label: 'dotted' },
-              { value: 'dashed', label: 'dashed' },
-              { value: 'solid', label: 'solid' },
-              { value: 'double', label: 'double' },
-              { value: 'groove', label: 'groove' },
-              { value: 'ridge', label: 'ridge' },
-              { value: 'inset', label: 'inset' },
-              { value: 'outset', label: 'outset' },
-              { value: 'hidden', label: 'hidden' }
-            ]}
-          />
-        </div>
+          <h2 className={style.selectColorTitle}>Style</h2>
+          <div id={style.borderStyles}>
+            <Select
+              clearable={false}
+              name="valid-border-styles"
+              value={this.state.borderStyle}
+              onChange={this.handleBorderStyleChange}
+              options={[
+                { value: 'none', label: 'none' },
+                { value: 'dotted', label: 'dotted' },
+                { value: 'dashed', label: 'dashed' },
+                { value: 'solid', label: 'solid' },
+                { value: 'double', label: 'double' },
+                { value: 'groove', label: 'groove' },
+                { value: 'ridge', label: 'ridge' },
+                { value: 'inset', label: 'inset' },
+                { value: 'outset', label: 'outset' },
+                { value: 'hidden', label: 'hidden' }
+              ]}
+            />
+          </div>
 
-        <h2 className={style.selectColorTitle}>Width</h2>
-        <div className={style.inputContainer}>
-          <input
-            className={style.inputContainer}
-            type="text"
-            value={this.state.borderWidthNumber}
-            onChange={(event) => { this.handleBorderWidthNumberChange(event); }}
-          />
-          <Select
-            clearable={false}
-            name="valid-thickness-suffix"
-            value={this.state.borderWidthSuffix}
-            onChange={this.handleBorderWidthSuffixChange}
-            options={optionsArray}
-          />
-        </div>
+          <h2 className={style.selectColorTitle}>Width</h2>
+          <div className={style.inputContainer}>
+            <input
+              className={style.inputContainer}
+              type="text"
+              value={this.state.borderWidthNumber}
+              onChange={(event) => { this.handleBorderWidthNumberChange(event); }}
+            />
+            <Select
+              clearable={false}
+              name="valid-thickness-suffix"
+              value={this.state.borderWidthSuffix}
+              onChange={this.handleBorderWidthSuffixChange}
+              options={optionsArray}
+            />
+          </div>
 
-        <h2 className={style.selectColorTitle}>Color</h2>
-        <ColorPicker color={this.state.borderColor} onChangeHandler={this.handleBorderColorChange} />
-      </form>
+          <h2 className={style.selectColorTitle}>Color</h2>
+          <ColorPicker color={this.state.borderColor} onChangeHandler={this.handleBorderColorChange} />
+        </form>
+      </div>
     );
   }
 }
