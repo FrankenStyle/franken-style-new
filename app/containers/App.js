@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { Tabs, Tab, TabList, TabPanel } from 'react-tabs';
 import * as cssActions from '../actions/cssProperties';
 import style from './App.css';
-import { promisifyGetCSS } from '../reducers/cssProperties';
+import { promisifyGetCSS, promisifyAppyCSS } from '../reducers/cssProperties';
 import { Borders, Colors, Flexbox, Texts, Layouts } from '../components';
 
 @connect(
@@ -39,6 +39,7 @@ export default class App extends Component {
   }
 
   componentDidMount() {
+    this.handleReset();
     this.setState({ currentUrl: window.location.ancestorOrigins[0] });
     chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       let cssSelector;
