@@ -39,6 +39,7 @@ export default class App extends Component {
   }
 
   componentDidMount() {
+    this.handleReset()
     this.setState({ currentUrl: window.location.ancestorOrigins[0] });
     chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       let cssSelector;
@@ -57,7 +58,7 @@ export default class App extends Component {
       sendResponse({ test: 'test' });
     });
   }
-
+  
   download(text) {
     const element = document.createElement('a');
     element.setAttribute('href', `data:text/plain;charset=utf-8,${  encodeURIComponent(text)}`);
