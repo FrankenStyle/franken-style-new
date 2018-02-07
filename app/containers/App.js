@@ -58,12 +58,7 @@ export default class App extends Component {
       sendResponse({ test: 'test' });
     });
   }
-
-  componentWillUnmount(){
-    this.handleReset()
-    alert('AJSFHJANFAKSJ')
-  }
-
+  
   download(text) {
     const element = document.createElement('a');
     element.setAttribute('href', `data:text/plain;charset=utf-8,${  encodeURIComponent(text)}`);
