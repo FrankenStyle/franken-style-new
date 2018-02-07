@@ -1,7 +1,7 @@
 # FrankenStyle
 A chrome extension that makes CSS easier and more fun!
 Style your webpages the way you want without the hassle of coding CSS because we do it for you!
-## Made by [Sir William Jeffrey Hatcher](https://github.com/jffhtchr), [Mark Lopez](https://github.com/mjpez), [Sam Alsmadi](https://github.com/lntelliMed), [Vesna Tan](https://github.com/Tanvez)
+## Made by [Jeff Hatcher](https://github.com/jffhtchr), [Mark Lopez](https://github.com/mjpez), [Sam Alsmadi](https://github.com/lntelliMed), [Vesna Tan](https://github.com/Tanvez)
 
 ## Features 
 
