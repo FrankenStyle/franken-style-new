@@ -86,105 +86,107 @@ export default class Texts extends Component {
       { value: '%', label: '%' },
       { value: 'pt', label: 'pt' }
     ];
+    const isElementSelected = this.props.isElementSelected;
     return (
-      <form id={style.colorForm}>
+      <div className={!isElementSelected ? style.disabled : ''}>
+        <form id={style.colorForm}>
+          <h2 className={style.selectColorTitle}>Font Size</h2>
+          <div className={style.inputContainer}>
+            <input
+              type="text"
+              className={style.inputNumber}
+              id={style.fontSizeInput}
+              value={this.state.fontSizeNumber}
+              onChange={(event) => { this.handleFontSizeNumberChange(event); }}
+            />
+            <Select
+              clearable={false}
+              name="valid-font-suffix"
+              value={this.state.fontSizeSuffix}
+              onChange={this.handleFontSizeSuffixChange}
+              options={optionsArray}
+            />
+          </div>
 
-        <h2 className={style.selectColorTitle}>Font Size</h2>
-        <div className={style.inputContainer}>
-          <input
-            type="text"
-            className={style.inputNumber}
-            id={style.fontSizeInput}
-            value={this.state.fontSizeNumber}
-            onChange={(event) => { this.handleFontSizeNumberChange(event); }}
-          />
-          <Select
-            clearable={false}
-            name="valid-font-suffix"
-            value={this.state.fontSizeSuffix}
-            onChange={this.handleFontSizeSuffixChange}
-            options={optionsArray}
-          />
-        </div>
+          <h2 className={style.selectColorTitle}>Font Family</h2>
+          <div id={style.fontFamily}>
+            <Select
+              clearable={false}
+              name="valid-font-family"
+              value={this.state.fontFamily}
+              onChange={this.handleFontFamilyChange}
+              options={[
+                { value: 'Arial', label: 'Arial' },
+                { value: 'Helvetica', label: 'Helvetica' },
+                { value: 'Times', label: 'Times' },
+                { value: 'Courier', label: 'Courier' },
+                { value: 'Georgia', label: 'Georgia' },
+                { value: 'Palatino', label: 'Palatino' },
+                { value: 'Garamond', label: 'Garamond' },
+                { value: 'Comic Sans MS', label: 'Comic Sans MS' }
+              ]}
+            />
+          </div>
 
-        <h2 className={style.selectColorTitle}>Font Family</h2>
-        <div id={style.fontFamily}>
-          <Select
-            clearable={false}
-            name="valid-font-family"
-            value={this.state.fontFamily}
-            onChange={this.handleFontFamilyChange}
-            options={[
-              { value: 'Arial', label: 'Arial' },
-              { value: 'Helvetica', label: 'Helvetica' },
-              { value: 'Times', label: 'Times' },
-              { value: 'Courier', label: 'Courier' },
-              { value: 'Georgia', label: 'Georgia' },
-              { value: 'Palatino', label: 'Palatino' },
-              { value: 'Garamond', label: 'Garamond' },
-              { value: 'Comic Sans MS', label: 'Comic Sans MS' }
-            ]}
-          />
-        </div>
+          <h2 className={style.selectColorTitle}>Font Weight</h2>
+          <div id={style.fontFamily}>
+            <Select
+              clearable={false}
+              name="valid-font-weight"
+              value={this.state.fontWeight}
+              onChange={this.handleFontWeightChange}
+              options={[
+                { value: 'normal', label: 'normal' },
+                { value: 'bold', label: 'bold' },
+                { value: 'lighter', label: 'lighter' },
+                { value: 'bolder', label: 'bolder' },
+                { value: 'inherit', label: 'inherit' },
+                { value: 'initial', label: 'initial' },
+                { value: 'unset', label: 'unset' }
+              ]}
+            />
+          </div>
 
-        <h2 className={style.selectColorTitle}>Font Weight</h2>
-        <div id={style.fontFamily}>
-          <Select
-            clearable={false}
-            name="valid-font-weight"
-            value={this.state.fontWeight}
-            onChange={this.handleFontWeightChange}
-            options={[
-              { value: 'normal', label: 'normal' },
-              { value: 'bold', label: 'bold' },
-              { value: 'lighter', label: 'lighter' },
-              { value: 'bolder', label: 'bolder' },
-              { value: 'inherit', label: 'inherit' },
-              { value: 'initial', label: 'initial' },
-              { value: 'unset', label: 'unset' }
-            ]}
-          />
-        </div>
+          <h2 className={style.selectColorTitle}>Text Transformation</h2>
+          <div id={style.fontFamily}>
+            <Select
+              clearable={false}
+              name="valid-font-weight"
+              value={this.state.textTransform}
+              onChange={this.handleTextTransformChange}
+              options={[
+                { value: 'none', label: 'none' },
+                { value: 'capitalize', label: 'capitalize' },
+                { value: 'lowercase', label: 'lowercase' },
+                { value: 'uppercase', label: 'uppercase' },
+                { value: 'initial', label: 'initial' },
+                { value: 'inherit', label: 'inherit' },
+                { value: 'unset', label: 'unset' }
+              ]}
+            />
+          </div>
 
-        <h2 className={style.selectColorTitle}>Text Transformation</h2>
-        <div id={style.fontFamily}>
-          <Select
-            clearable={false}
-            name="valid-font-weight"
-            value={this.state.textTransform}
-            onChange={this.handleTextTransformChange}
-            options={[
-              { value: 'none', label: 'none' },
-              { value: 'capitalize', label: 'capitalize' },
-              { value: 'lowercase', label: 'lowercase' },
-              { value: 'uppercase', label: 'uppercase' },
-              { value: 'initial', label: 'initial' },
-              { value: 'inherit', label: 'inherit' },
-              { value: 'unset', label: 'unset' }
-            ]}
-          />
-        </div>
+          <h2 className={style.selectColorTitle}>Text Decoration</h2>
+          <div id={style.fontFamily}>
+            <Select
+              clearable={false}
+              name="valid-font-weight"
+              value={this.state.textDecoration}
+              onChange={this.handleTextDecorationChange}
+              options={[
+                { value: 'none', label: 'none' },
+                { value: 'underline', label: 'underline' },
+                { value: 'line-through', label: 'line-through' },
+                { value: 'overline', label: 'overline' },
+                { value: 'initial', label: 'initial' },
+                { value: 'inherit', label: 'inherit' },
+                { value: 'unset', label: 'unset' }
+              ]}
+            />
+          </div>
 
-        <h2 className={style.selectColorTitle}>Text Decoration</h2>
-        <div id={style.fontFamily}>
-          <Select
-            clearable={false}
-            name="valid-font-weight"
-            value={this.state.textDecoration}
-            onChange={this.handleTextDecorationChange}
-            options={[
-              { value: 'none', label: 'none' },
-              { value: 'underline', label: 'underline' },
-              { value: 'line-through', label: 'line-through' },
-              { value: 'overline', label: 'overline' },
-              { value: 'initial', label: 'initial' },
-              { value: 'inherit', label: 'inherit' },
-              { value: 'unset', label: 'unset' }
-            ]}
-          />
-        </div>
-
-      </form>
+        </form>
+      </div>
     );
   }
 }

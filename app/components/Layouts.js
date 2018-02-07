@@ -111,87 +111,89 @@ export default class Layouts extends Component {
       { value: '%', label: '%' },
       { value: 'pt', label: 'pt' }
     ];
+    const isElementSelected = this.props.isElementSelected;
     return (
-      <form id={style.colorForm}>
-        <h2 className={style.selectColorTitle}>Visibility</h2>
-        <div id={style.borderStyles}>
-          <div id={style.toggleShrinker}>
-            <label className={style.switch}>
-              <input id="checkbox-visibility" type="checkbox" onChange={() => { this.handleVisibilityChange(); }} />
-              <span className={[style.slider, style.round].join(' ')} />
-            </label>
+      <div className={!isElementSelected ? style.disabled : ''}>
+        <form id={style.colorForm}>
+          <h2 className={style.selectColorTitle}>Visibility</h2>
+          <div id={style.borderStyles}>
+            <div id={style.toggleShrinker}>
+              <label className={style.switch}>
+                <input id="checkbox-visibility" type="checkbox" onChange={() => { this.handleVisibilityChange(); }} />
+                <span className={[style.slider, style.round].join(' ')} />
+              </label>
+            </div>
           </div>
-        </div>
 
-        <h2 className={style.selectColorTitle}>Height</h2>
-        <div className={style.inputContainer}>
-          <input
-            type="text"
-            className={style.inputNumber}
-            value={this.state.heightNumber}
-            onChange={(event) => { this.handleHeightNumberChange(event); }}
-          />
-          <Select
-            clearable={false}
-            name="valid-height-suffix"
-            value={this.state.heightSuffix}
-            onChange={this.handleHeightSuffixChange}
-            options={optionsArray}
-          />
-        </div>
+          <h2 className={style.selectColorTitle}>Height</h2>
+          <div className={style.inputContainer}>
+            <input
+              type="text"
+              className={style.inputNumber}
+              value={this.state.heightNumber}
+              onChange={(event) => { this.handleHeightNumberChange(event); }}
+            />
+            <Select
+              clearable={false}
+              name="valid-height-suffix"
+              value={this.state.heightSuffix}
+              onChange={this.handleHeightSuffixChange}
+              options={optionsArray}
+            />
+          </div>
 
-        <h2 className={style.selectColorTitle}>Width</h2>
-        <div className={style.inputContainer}>
-          <input
-            type="text"
-            className={style.inputNumber}
-            value={this.state.widthNumber}
-            onChange={(event) => { this.handleWidthNumberChange(event); }}
-          />
-          <Select
-            clearable={false}
-            name="valid-width-suffix"
-            value={this.state.widthSuffix}
-            onChange={this.handleWidthSuffixChange}
-            options={optionsArray}
-          />
-        </div>
+          <h2 className={style.selectColorTitle}>Width</h2>
+          <div className={style.inputContainer}>
+            <input
+              type="text"
+              className={style.inputNumber}
+              value={this.state.widthNumber}
+              onChange={(event) => { this.handleWidthNumberChange(event); }}
+            />
+            <Select
+              clearable={false}
+              name="valid-width-suffix"
+              value={this.state.widthSuffix}
+              onChange={this.handleWidthSuffixChange}
+              options={optionsArray}
+            />
+          </div>
 
-        <h2 className={style.selectColorTitle}>Margin</h2>
-        <div className={style.inputContainer}>
-          <input
-            type="text"
-            className={style.inputNumber}
-            value={this.state.marginNumber}
-            onChange={(event) => { this.handleMarginNumberChange(event); }}
-          />
-          <Select
-            clearable={false}
-            name="valid-margin-suffix"
-            value={this.state.marginSuffix}
-            onChange={this.handleMarginSuffixChange}
-            options={optionsArray}
-          />
-        </div>
+          <h2 className={style.selectColorTitle}>Margin</h2>
+          <div className={style.inputContainer}>
+            <input
+              type="text"
+              className={style.inputNumber}
+              value={this.state.marginNumber}
+              onChange={(event) => { this.handleMarginNumberChange(event); }}
+            />
+            <Select
+              clearable={false}
+              name="valid-margin-suffix"
+              value={this.state.marginSuffix}
+              onChange={this.handleMarginSuffixChange}
+              options={optionsArray}
+            />
+          </div>
 
-        <h2 className={style.selectColorTitle}>Padding</h2>
-        <div className={style.inputContainer}>
-          <input
-            type="text"
-            className={style.inputNumber}
-            value={this.state.paddingNumber}
-            onChange={(event) => { this.handlePaddingNumberChange(event); }}
-          />
-          <Select
-            clearable={false}
-            name="valid-padding-suffix"
-            value={this.state.paddingSuffix}
-            onChange={this.handlePaddingSuffixChange}
-            options={optionsArray}
-          />
-        </div>
-
-      </form>
+          <h2 className={style.selectColorTitle}>Padding</h2>
+          <div className={style.inputContainer}>
+            <input
+              type="text"
+              className={style.inputNumber}
+              value={this.state.paddingNumber}
+              onChange={(event) => { this.handlePaddingNumberChange(event); }}
+            />
+            <Select
+              clearable={false}
+              name="valid-padding-suffix"
+              value={this.state.paddingSuffix}
+              onChange={this.handlePaddingSuffixChange}
+              options={optionsArray}
+            />
+          </div>
+        </form>
+      </div>
     );
   }
 }
